@@ -1,0 +1,26 @@
+/* Centralizar o card no meio da tela */
+.card-login {
+  max-width: 400px;
+  width: 100%;  /* Faz o card ocupar toda a largura disponível em telas pequenas */
+  margin: 0 auto;  /* Centraliza horizontalmente */
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  border-radius: 8px; /* Bordas arredondadas para um visual mais moderno */
+}
+
+/* Centraliza verticalmente e ajusta o layout responsivo */
+.full-height-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Garante que ocupa a altura completa da viewport */
+  padding: 20px;
+}
+
+/* Previne rolagem vertical indesejada */
+body, html {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;  /* Previne o scroll vertical */
+}
+
