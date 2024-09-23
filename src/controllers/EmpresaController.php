@@ -45,8 +45,15 @@ class EmpresaController {
                 include __DIR__ . '/../views/empresa_cadastro.php'; // Exibe o formulário com o erro
             } else {
                 // Cadastrar a nova empresa no banco de dados
-                EmpresaModel::createFornecedor($nome_fornecedor, $cnpj_fornecedor, $tel_fornecedor, $email_fornecedor);
-                header('Location: index.php?page=login'); // Redireciona para a página de login
+                $sucesso = EmpresaModel::createFornecedor($nome_fornecedor, $cnpj_fornecedor, $tel_fornecedor, $email_fornecedor);
+
+                if ($sucesso) {
+                    // Redireciona com a mensagem de sucesso
+                    header('Location: index.php?page=cadastro_empresa&success=true');
+                } else {
+                    // Redireciona com a mensagem de erro
+                    header('Location: index.php?page=cadastro_empresa&success=false');
+                }
                 exit;
             }
         } else {

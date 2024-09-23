@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="/nimval_project/public/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/nimval_project/public/assets/css/global.css"> <!-- CSS personalizado -->
+    <link rel="stylesheet" href="/Project_Nimval/public/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/Project_Nimval/public/assets/css/global.css"> <!-- CSS personalizado -->
 </head>
 <body>
 
     <!-- Header com fundo azul escuro -->
     <header class="bg-dark-blue text-white py-2">
         <div class="container">
-            <h2><b>NIMVAL - Rastreamentos</b></h2>
+            <h3><b>NIMVAL - Rastreamentos</b></h3>
         </div>
     </header>
 
@@ -53,6 +53,6 @@
         </div>
     </div>
 
-    <script src="/nimval_project/public/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/Project_Nimval/public/assets/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

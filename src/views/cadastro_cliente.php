@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Cliente</title>
-    <link rel="stylesheet" href="/nimval_project/public/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/Project_Nimval/public/assets/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container mt-5">
@@ -35,6 +35,6 @@
             <button type="submit" class="btn btn-primary w-100">Cadastrar Cliente</button>
         </form>
     </div>
-    <script src="/nimval_project/public/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/Project_Nimval/public/assets/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

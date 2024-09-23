@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../database/Database.php'; // Certifique-se de que o caminho está correto
 
 class EmpresaModel {
+    
     // Verificar se o fornecedor (empresa) já existe pelo email
     public static function findFornecedorByEmail($email) {
         $db = Database::getConnection();
@@ -13,7 +14,10 @@ class EmpresaModel {
     // Criar um novo fornecedor (empresa)
     public static function createFornecedor($nome_fornecedor, $cnpj_fornecedor, $tel_fornecedor, $email_fornecedor) {
         $db = Database::getConnection();
-        $stmt = $db->prepare("INSERT INTO fornecedor (nome_fornecedor, cnpj_fornecedor, tel_fornecedor, email_fornecedor) VALUES (?, ?, ?, ?)");
+        $stmt = $db->prepare(
+            "INSERT INTO fornecedor (nome_fornecedor, cnpj_fornecedor, tel_fornecedor, email_fornecedor) 
+             VALUES (?, ?, ?, ?)"
+        );
         return $stmt->execute([$nome_fornecedor, $cnpj_fornecedor, $tel_fornecedor, $email_fornecedor]);
     }
 }

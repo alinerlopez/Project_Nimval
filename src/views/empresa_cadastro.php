@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro</title>
-    <link rel="stylesheet" href="/nimval_project/public/assets/css/bootstrap.min.css">
+    <title>Cadastro de Empresa</title>
+    <link rel="stylesheet" href="/Project_Nimval/public/assets/css/bootstrap.min.css">
     <!-- Incluindo jQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7-beta.19/jquery.inputmask.min.js"></script>
@@ -17,7 +17,9 @@
 
         .success-message {
             color: green;
-            font-size: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
         }
     </style>
 </head>
@@ -27,16 +29,20 @@
     <div class="container mt-5">
         <h2 class="text-center mb-4">Cadastro de Empresa</h2>
 
+        <!-- Exibição da mensagem de sucesso -->
+        <?php if (isset($_GET['success']) && $_GET['success'] == 'true'): ?>
+            <div class="alert alert-success success-message">
+                Cadastro realizado com sucesso!
+            </div>
+        <?php endif; ?>
+
         <!-- Linha e coluna para centralizar e limitar a largura do formulário -->
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-6"> <!-- Limita o formulário a 60% da largura da tela -->
 
                 <!-- Formulário de cadastro -->
                 <form method="POST" action="index.php?page=cadastro_empresa">
-                    <div class="form-group mb-3">
-                        <label for="nome_fornecedor">Nome do Fornecedor</label>
-                        <input type="text" class="form-control" name="nome_fornecedor" required>
-                    </div>
+                    <!-- Campo CNPJ como primeiro -->
                     <div class="form-group mb-3">
                         <label for="cnpj_fornecedor">CNPJ</label>
                         <input type="text" class="form-control" id="cnpj_fornecedor" name="cnpj_fornecedor" required>
@@ -44,9 +50,17 @@
                         <small id="cnpj_error" class="error-message"></small>
                         <small id="cnpj_success" class="success-message"></small>
                     </div>
+
+                    <!-- Campo Nome do Fornecedor que será preenchido automaticamente -->
+                    <div class="form-group mb-3">
+                        <label for="nome_fornecedor">Nome do Fornecedor</label>
+                        <input type="text" class="form-control" id="nome_fornecedor" name="nome_fornecedor" readonly>
+                    </div>
+
+                    <!-- Outros campos -->
                     <div class="form-group mb-3">
                         <label for="tel_fornecedor">Telefone</label>
-                        <input type="text" class="form-control" id="tel_fornecedor" name="tel_fornecedor" required>
+                        <input type="text" class="form-control" name="tel_fornecedor" id="tel_fornecedor" required>
                     </div>
                     <div class="form-group mb-3">
                         <label for="email_fornecedor">Email</label>
@@ -59,7 +73,7 @@
         </div>
     </div>
 
-    <!-- Script para aplicar a máscara ao campo de CNPJ -->
+    <!-- Script para aplicar a máscara ao campo de CNPJ e validar via AJAX -->
     <script>
         $(document).ready(function(){
             // Aplicando a máscara para CNPJ (99.999.999/9999-99)
@@ -85,10 +99,12 @@
                                 // CNPJ inválido, exibe a mensagem de erro
                                 $('#cnpj_error').text(data.message);
                                 $('#cnpj_success').text('');
+                                $('#nome_fornecedor').val(''); // Limpa o campo de nome se o CNPJ for inválido
                             } else {
-                                // CNPJ válido, remove a mensagem de erro
+                                // CNPJ válido, remove a mensagem de erro e preenche o nome da empresa
                                 $('#cnpj_success').text(data.message);
                                 $('#cnpj_error').text('');
+                                $('#nome_fornecedor').val(data.nome); // Preenche o campo com o nome da empresa
                             }
                         },
                         error: function() {
@@ -104,6 +120,6 @@
         });
     </script>
 
-    <script src="/nimval_project/public/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/Project_Nimval/public/assets/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
