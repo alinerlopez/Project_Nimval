@@ -1,31 +1,50 @@
 <?php
-require_once '../config/config.php';  // Inclui a conexão com o banco
+require_once '../config/config.php';  
 
 class UserModel {
+
+    public static function createUser($nome, $email, $senha, $perfil, $fornecedor_id, $cpf, $telefone) {
+        global $pdo;
+        try {
+            $token = bin2hex(random_bytes(16));
+
+            error_log("Tentativa de criar usuário: Nome = $nome, Email = $email, CPF = $cpf, Telefone = $telefone, Fornecedor ID = $fornecedor_id");
+
+            $stmt = $pdo->prepare("INSERT INTO usuarios (nome, email, senha, cpf, telefone, nivel_acesso, id_fornecedor, token_confirmacao, email_validado) 
+                                   VALUES (:nome, :email, :senha, :cpf, :telefone, :perfil, :fornecedor_id, :token, 0)");
+            $stmt->bindParam(':nome', $nome);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':senha', $senha);
+            $stmt->bindParam(':cpf', $cpf);
+            $stmt->bindParam(':telefone', $telefone);
+            $stmt->bindParam(':perfil', $perfil);
+            $stmt->bindParam(':fornecedor_id', $fornecedor_id);
+            $stmt->bindParam(':token', $token);  
+
+            $resultado = $stmt->execute();
+
+            if ($resultado) {
+                error_log("Usuário criado com sucesso.");
+         
+                $linkConfirmacao = "http://localhost/confirmar_email.php?token=$token";
+                mail($email, "Confirme seu e-mail", "Clique no link para confirmar: $linkConfirmacao");
+            } else {
+                error_log("Falha ao criar usuário.");
+            }
+
+            return $resultado;  
+        } catch (PDOException $e) {
+            error_log("Erro ao criar usuário: " . $e->getMessage());  
+            return false;
+        }
+    }
+
     public static function findUserByEmail($email) {
         global $pdo;
         $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE email = :email");
         $stmt->bindParam(':email', $email);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);  // Retorna os dados do usuário, incluindo o perfil
-    }
-
-    public static function createUser($email, $senha, $perfil) {
-        global $pdo;
-        $stmt = $pdo->prepare("INSERT INTO usuarios (email, senha, perfil) VALUES (:email, :senha, :perfil)");
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':senha', $senha);
-        $stmt->bindParam(':perfil', $perfil);
-        return $stmt->execute();  // Insere o novo usuário
-    }
-
-    public static function createClient($email, $senha, $empresa_id) {
-        global $pdo;
-        $stmt = $pdo->prepare("INSERT INTO usuarios (email, senha, perfil, empresa_id) VALUES (:email, :senha, 'cliente', :empresa_id)");
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':senha', $senha);
-        $stmt->bindParam(':empresa_id', $empresa_id);
-        return $stmt->execute();  // Insere um novo cliente vinculado à empresa
+        return $stmt->fetch(PDO::FETCH_ASSOC);  
     }
 }
 ?>

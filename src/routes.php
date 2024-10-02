@@ -1,11 +1,10 @@
 <?php
-// Use __DIR__ para garantir que o caminho seja relativo ao diretório do arquivo routes.php
 require_once __DIR__ . '/controllers/AuthController.php';
-require_once __DIR__ . '/controllers/EmpresaController.php'; // Controlador para cadastro de empresas
-require_once __DIR__ . '/controllers/CadastroClienteController.php'; // Controlador para cadastro de clientes
+require_once __DIR__ . '/controllers/EmpresaController.php'; 
+require_once __DIR__ . '/controllers/CadastroClienteController.php'; 
 require_once __DIR__ . '/controllers/PedidoController.php';
+require_once __DIR__ . '/controllers/SenhaController.php'; 
 
-// Defina as rotas
 function handleRequest($page) {
     switch ($page) {
         case 'login':
@@ -18,19 +17,34 @@ function handleRequest($page) {
             $controller->logout();
             break;
 
-        case 'cadastro_empresa':
-            $controller = new EmpresaController(); // Usar o controlador correto para cadastro de empresas
+        case 'empresa_cadastro':
+            $controller = new EmpresaController(); 
             $controller->cadastrar();
             break;
 
         case 'salvar_empresa':
-            $controller = new EmpresaController(); // Salvar a nova empresa
-            $controller->salvarEmpresa(); // Esse método precisa ser implementado no controlador
+            $controller = new EmpresaController(); 
+            $controller->salvarEmpresa(); 
             break;
 
         case 'pedidos':
             $controller = new PedidoController();
             $controller->index();
+            break;
+
+        case 'criar_senha':  
+            $controller = new SenhaController();
+            $controller->criarSenha();
+            break;
+
+        case 'salvar_senha':  
+            $controller = new SenhaController();
+            $controller->salvarSenha();
+            break;
+
+        case 'validar_email':  
+            $controller = new AuthController();
+            $controller->validarEmail();
             break;
 
         default:

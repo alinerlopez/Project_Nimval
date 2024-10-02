@@ -17,6 +17,18 @@
     </header>
 
     <div class="container mt-5">
+
+        <!-- Exibir mensagens de validação de e-mail -->
+        <?php if (isset($_GET['email_validado']) && $_GET['email_validado'] == 'true'): ?>
+            <div class="alert alert-success text-center">
+                Seu e-mail foi validado com sucesso! Agora você pode fazer login.
+            </div>
+        <?php elseif (isset($_GET['email_validado']) && $_GET['email_validado'] == 'false'): ?>
+            <div class="alert alert-danger text-center">
+                O token de validação é inválido ou expirou.
+            </div>
+        <?php endif; ?>
+
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-4">
                 <div class="card card-login shadow-lg">
@@ -45,7 +57,7 @@
                         
                         <!-- Link para cadastro de empresa -->
                         <div class="text-center mt-3">
-                            <p>Ainda não tem uma conta? <a href="index.php?page=cadastro_empresa">Cadastre sua empresa</a></p>
+                            <p>Ainda não tem uma conta? <a href="index.php?page=empresa_cadastro">Cadastre sua empresa</a></p>
                         </div>
                     </div>
                 </div>

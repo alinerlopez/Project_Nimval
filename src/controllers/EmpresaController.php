@@ -1,64 +1,54 @@
 <?php
-require_once __DIR__ . '/../models/EmpresaModel.php'; // Modelo para interagir com o banco de dados
+require_once __DIR__ . '/../models/EmpresaModel.php';  
+require_once __DIR__ . '/../models/UserModel.php';
+require_once __DIR__ . '/../utils/CNPJValidator.php'; 
 
 class EmpresaController {
 
-    // Função para validar o CNPJ através da API Receitaws
-    private function validarCNPJ($cnpj) {
-        // Remove os caracteres especiais
-        $cnpj = preg_replace('/[^0-9]/', '', $cnpj);
+    public function cadastrar() {
 
-        // URL da API para consulta
-        $url = "https://www.receitaws.com.br/v1/cnpj/" . $cnpj;
-
-        // Faz a requisição à API
-        $response = file_get_contents($url);
-        $data = json_decode($response, true);
-
-        // Verifica o status da resposta
-        if (isset($data['status']) && $data['status'] == 'ERROR') {
-            return false; // CNPJ inválido ou não encontrado
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();  
         }
 
-        return $data; // Retorna os dados se o CNPJ for válido
-    }
-
-    public function cadastrar() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $nome_fornecedor = $_POST['nome_fornecedor'];
-            $cnpj_fornecedor = $_POST['cnpj_fornecedor'];
-            $tel_fornecedor = $_POST['tel_fornecedor'];
-            $email_fornecedor = $_POST['email_fornecedor'];
+            
+            $cnpj = trim($_POST['cnpj_fornecedor']);  
+            $nome_fornecedor = trim($_POST['nome_fornecedor']);
+            $email = trim($_POST['email_fornecedor']);
+            $telefone = trim($_POST['tel_fornecedor']);
 
-            // Validar CNPJ via API antes de prosseguir
-            $validacao_cnpj = $this->validarCNPJ($cnpj_fornecedor);
-
-            if (!$validacao_cnpj) {
+            $cnpjValidado = CNPJValidator::validarCNPJ($cnpj); 
+            if (!$cnpjValidado) {
                 $error = "CNPJ inválido ou não encontrado.";
-                include __DIR__ . '/../views/empresa_cadastro.php'; // Exibe o formulário com o erro
+                include __DIR__ . '/../views/empresa_cadastro.php';  
                 return;
             }
 
-            // Verifica se o email já está cadastrado
-            if (EmpresaModel::findFornecedorByEmail($email_fornecedor)) {
-                $error = "Este email já está cadastrado.";
-                include __DIR__ . '/../views/empresa_cadastro.php'; // Exibe o formulário com o erro
-            } else {
-                // Cadastrar a nova empresa no banco de dados
-                $sucesso = EmpresaModel::createFornecedor($nome_fornecedor, $cnpj_fornecedor, $tel_fornecedor, $email_fornecedor);
+            if (EmpresaModel::findFornecedorByCNPJ($cnpj)) {
+                $error = "CNPJ já cadastrado.";
+                include __DIR__ . '/../views/empresa_cadastro.php';  
+                return;
+            }
 
-                if ($sucesso) {
-                    // Redireciona com a mensagem de sucesso
-                    header('Location: index.php?page=cadastro_empresa&success=true');
-                } else {
-                    // Redireciona com a mensagem de erro
-                    header('Location: index.php?page=cadastro_empresa&success=false');
-                }
+            if (EmpresaModel::findFornecedorByEmail($email)) {
+                $error = "E-mail já cadastrado.";
+                include __DIR__ . '/../views/empresa_cadastro.php';  
+                return;
+            }
+
+            $fornecedor_id = EmpresaModel::createFornecedor($nome_fornecedor, $cnpj, $telefone, $email);
+            if ($fornecedor_id) {
+                $_SESSION['email'] = $email;
+                $_SESSION['fornecedor_id'] = $fornecedor_id;
+                header('Location: index.php?page=criar_senha');
                 exit;
+            } else {
+                $error = "Erro ao criar fornecedor.";
+                include __DIR__ . '/../views/empresa_cadastro.php';  
             }
         } else {
-            // Exibir o formulário de cadastro
-            include __DIR__ . '/../views/empresa_cadastro.php';
+            include __DIR__ . '/../views/empresa_cadastro.php';  
         }
     }
 }
