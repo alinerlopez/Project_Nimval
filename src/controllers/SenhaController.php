@@ -48,7 +48,7 @@ class SenhaController {
             $email = $_SESSION['email'];
             $fornecedor_id = $_SESSION['fornecedor_id']; 
 
-            // Criar o usuário no banco de dados
+            // Criar o usuário no banco de dados usando o UserModel
             if (UserModel::createUser($nome, $email, $senha_hash, 'fornecedor', $fornecedor_id, $cpf, $telefone)) {
                 // Redirecionar para a página de login com mensagem de sucesso
                 header('Location: index.php?page=login&senha_criada=true');
