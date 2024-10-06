@@ -1,28 +1,21 @@
 <?php
-// Conecte ao banco de dados
 $conn = new mysqli('localhost', 'root', '', 'bd_nimval');
 
-// Verifica a conexão com o banco de dados
 if ($conn->connect_error) {
     die("Erro ao conectar ao banco de dados: " . $conn->connect_error);
 }
-
-// Variável para armazenar a mensagem de status
 $statusMessage = "";
 $statusClass = "";
 
-// Verifica se o token foi passado na URL
 if (isset($_GET['token'])) {
     $token = $_GET['token'];
 
-    // Verifica se o token existe e se o e-mail ainda não foi confirmado
     $stmt = $conn->prepare("SELECT id_usuario FROM usuarios WHERE token_confirmacao = ? AND email_validado = 0");
     $stmt->bind_param("s", $token);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // Confirma o e-mail e limpa o token
         $stmt = $conn->prepare("UPDATE usuarios SET email_validado = 1, token_confirmacao = '' WHERE token_confirmacao = ?");
         $stmt->bind_param("s", $token);
         $stmt->execute();
@@ -33,14 +26,13 @@ if (isset($_GET['token'])) {
         $statusMessage = "Token inválido ou e-mail já confirmado.";
         $statusClass = "error";
     }
-    // Fecha o statement
+
     $stmt->close();
 } else {
     $statusMessage = "Token não encontrado.";
     $statusClass = "error";
 }
 
-// Fecha a conexão com o banco de dados
 $conn->close();
 ?>
 
@@ -49,7 +41,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmação de E-mail</title>
+    <title>Confirmação de e-mail</title>
     <style>
         body {
             display: flex;
@@ -100,10 +92,10 @@ $conn->close();
 </head>
 <body>
     <div class="container">
-        <h1>Confirmação de E-mail</h1>
+        <h1>Confirmação de e-mail</h1>
         <p class="<?php echo $statusClass; ?>"><?php echo $statusMessage; ?></p>
         <?php if ($statusClass == "success"): ?>
-            <a href="login.php" class="button">Fazer Login</a>
+            <a href="index.php?page=login" class="button">Fazer Login</a>
         <?php endif; ?>
     </div>
 </body>
