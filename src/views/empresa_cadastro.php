@@ -8,7 +8,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7-beta.19/jquery.inputmask.min.js"></script>
     <style>
-        /* Estilo para mensagens de erro e sucesso */
         .error-message {
             color: red;
             font-size: 12px;
@@ -51,14 +50,12 @@
     <div class="container mt-5">
         <h2 class="text-center mb-4">Cadastro de Empresa</h2>
 
-        <!-- Exibição da mensagem de sucesso -->
         <?php if (isset($_GET['success']) && $_GET['success'] == 'true'): ?>
             <div class="alert alert-success success-message">
                 Cadastro realizado com sucesso! Verifique seu e-mail para ativar sua conta.
             </div>
         <?php endif; ?>
 
-        <!-- Exibição da mensagem de erro na validação do e-mail -->
         <?php if (isset($_GET['email_validado']) && $_GET['email_validado'] == 'false'): ?>
             <div class="alert alert-danger text-center">
                 O token de validação é inválido ou expirou.
@@ -67,10 +64,7 @@
 
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-6">
-
-                <!-- Formulário de cadastro -->
                 <form id="form_cadastro_empresa" method="POST" action="index.php?page=empresa_cadastro">
-                    <!-- Campo CNPJ com validação visual -->
                     <div class="form-group mb-3 position-relative">
                         <label for="cnpj_fornecedor">CNPJ</label>
                         <input type="text" class="form-control" id="cnpj_fornecedor" name="cnpj_fornecedor" required>
@@ -78,19 +72,14 @@
                         <span class="validation-icon" id="cnpj_icon"></span>
                     </div>
 
-                    <!-- Campo Nome do Fornecedor -->
                     <div class="form-group mb-3">
                         <label for="nome_fornecedor">Nome do Fornecedor</label>
                         <input type="text" class="form-control" id="nome_fornecedor" name="nome_fornecedor" readonly>
                     </div>
-
-                    <!-- Campo Telefone -->
                     <div class="form-group mb-3">
                         <label for="tel_fornecedor">Telefone</label>
                         <input type="text" class="form-control" name="tel_fornecedor" id="tel_fornecedor" required>
                     </div>
-
-                    <!-- Campo Email -->
                     <div class="form-group mb-3">
                         <label for="email_fornecedor">Email</label>
                         <input type="email" class="form-control" name="email_fornecedor" id="email_fornecedor" required>
@@ -106,11 +95,9 @@
 
     <script>
     $(document).ready(function() {
-    // Máscara para os campos de CNPJ e Telefone
     $('#cnpj_fornecedor').inputmask('99.999.999/9999-99', { clearIncomplete: true });
     $('#tel_fornecedor').inputmask('(99) 99999-9999', { clearIncomplete: true });
 
-    // Validação de CNPJ ao perder o foco
     $('#cnpj_fornecedor').on('blur', function() {
         var cnpj = $('#cnpj_fornecedor').val().replace(/\D/g, '');
 
@@ -149,28 +136,27 @@
         }
     });
 
-    // Validação de CNPJ e Email no envio do formulário
     $('#form_cadastro_empresa').on('submit', function(e) {
-    e.preventDefault();  // Evita o envio do formulário até a validação ser concluída
+    e.preventDefault();  
 
     var cnpj = $('#cnpj_fornecedor').val().replace(/\D/g, '');
     var email = $('#email_fornecedor').val();
 
-    console.log("CNPJ: ", cnpj);  // Verifique se o CNPJ está sendo capturado corretamente
-    console.log("Email: ", email);  // Verifique se o email está sendo capturado corretamente
+    console.log("CNPJ: ", cnpj);  
+    console.log("Email: ", email);  
 
     $.ajax({
-        url: '/Project_Nimval/public/validate_email_cnpj_db.php',  // Verifica se o caminho está correto
+        url: '/Project_Nimval/public/validate_email_cnpj_db.php',  
         method: 'POST',
         data: { cnpj: cnpj, email: email },
         success: function(response) {
             console.log("Resposta do servidor (bruta): ", response);
             try {
-                var data = response; // A resposta já está em JSON, então não precisa de JSON.parse
+                var data = response; 
                 if (data.status === 'error') {
                     alert(data.message);
                 } else {
-                    $('#form_cadastro_empresa')[0].submit();  // Envia o formulário se a validação passar
+                    $('#form_cadastro_empresa')[0].submit();  
                 }
             } catch (error) {
                 console.error("Erro ao processar a resposta JSON: ", error);

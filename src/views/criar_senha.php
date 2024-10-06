@@ -19,6 +19,13 @@
             </div>
         <?php endif; ?>
 
+        <?php if (isset($success)): ?>
+            <div class="alert alert-success text-center">
+                <h4>Cadastro realizado com sucesso!</h4>
+                <p>Verifique seu e-mail para validar o cadastro.</p>
+            </div>
+        <?php endif; ?>
+
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-6">
                 <div class="card">
@@ -63,13 +70,13 @@
         $('#telefone').inputmask('(99) 99999-9999', { clearIncomplete: true });
 
         $('form').on('submit', function(e) {
-        var senha = $('input[name="senha"]').val();
-        var confirmarSenha = $('input[name="confirmar_senha"]').val();
+            var senha = $('input[name="senha"]').val();
+            var confirmarSenha = $('input[name="confirmar_senha"]').val();
 
-        if (senha !== confirmarSenha) {
-            e.preventDefault(); 
-            alert('As senhas não coincidem!');
-        }
+            if (senha !== confirmarSenha) {
+                e.preventDefault(); 
+                alert('As senhas não coincidem!');
+            }
         });
     });
     </script>

@@ -1,19 +1,15 @@
 <?php
-session_start();
+session_start();  
 $page = isset($_GET['page']) ? $_GET['page'] : null;
-
-require_once __DIR__ . '/../src/routes.php';
+require_once __DIR__ . '/../src/routes.php';  
 
 if ($page) {
-    handleRequest($page);
+    handleRequest($page);  
 } else {
     if (isset($_SESSION['usuario'])) {
-        echo '<div class="container mt-5">';
-        echo '<h1>Bem-vindo, ' . $_SESSION['perfil'] . '!</h1>';
-        echo '<p>Aqui você pode gerenciar seus pedidos e rastreamentos.</p>';
-        echo '</div>';
+        header('Location: index.php?page=home');
     } else {
-        require_once __DIR__ . '/../src/views/login.php';
+        header('Location: index.php?page=login'); 
+        exit;
     }
 }
-?>

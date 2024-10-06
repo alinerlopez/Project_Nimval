@@ -10,7 +10,6 @@
     <div class="container mt-5">
         <h2 class="text-center mb-4">Cadastro de Cliente</h2>
 
-        <!-- Exibição de erros ou mensagens de sucesso -->
         <?php if (isset($error)): ?>
             <div class="alert alert-danger text-center">
                 <?= htmlspecialchars($error); ?>

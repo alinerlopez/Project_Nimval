@@ -10,7 +10,6 @@ class EmpresaController {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();  
         }
-
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
             $cnpj = trim($_POST['cnpj_fornecedor']);  
@@ -36,7 +35,6 @@ class EmpresaController {
                 include __DIR__ . '/../views/empresa_cadastro.php';  
                 return;
             }
-
             $fornecedor_id = EmpresaModel::createFornecedor($nome_fornecedor, $cnpj, $telefone, $email);
             if ($fornecedor_id) {
                 $_SESSION['email'] = $email;
