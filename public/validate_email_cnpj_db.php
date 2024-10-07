@@ -3,7 +3,6 @@ header('Content-Type: application/json');
 
 require_once __DIR__ . '/../src/models/EmpresaModel.php';
 
-
 $response = ['status' => 'success', 'message' => ''];
 
 if (isset($_POST['cnpj']) && isset($_POST['email'])) {

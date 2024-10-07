@@ -4,12 +4,12 @@ $conn = new mysqli('localhost', 'root', '', 'bd_nimval');
 if ($conn->connect_error) {
     die("Erro ao conectar ao banco de dados: " . $conn->connect_error);
 }
+
 $statusMessage = "";
 $statusClass = "";
 
-if (isset($_GET['token'])) {
-    $token = $_GET['token'];
-
+if (isset($_GET['token']) && !empty($_GET['token'])) {
+    $token = htmlspecialchars($_GET['token']); 
     $stmt = $conn->prepare("SELECT id_usuario FROM usuarios WHERE token_confirmacao = ? AND email_validado = 0");
     $stmt->bind_param("s", $token);
     $stmt->execute();
@@ -95,7 +95,7 @@ $conn->close();
         <h1>Confirmação de e-mail</h1>
         <p class="<?php echo $statusClass; ?>"><?php echo $statusMessage; ?></p>
         <?php if ($statusClass == "success"): ?>
-            <a href="index.php?page=login" class="button">Fazer Login</a>
+            <a href="/Project_Nimval/public/index.php?page=login" class="button">Fazer Login</a>
         <?php endif; ?>
     </div>
 </body>

@@ -31,7 +31,6 @@ $nomeUsuario = $_SESSION['nome_usuario'];
             width: 250px;
             background-color: #343a40;
             color: white;
-            transition: width 0.3s ease;
             position: relative;
         }
 
@@ -53,13 +52,17 @@ $nomeUsuario = $_SESSION['nome_usuario'];
 
         .sidebar .nav-link {
             padding: 15px;
+            font-size: 1rem; 
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
         }
 
         .content {
             flex-grow: 1;
             padding: 20px;
             background-color: #f8f9fa;
-            transition: transform 0.3s ease;
         }
 
         .sidebar-toggler {
@@ -88,8 +91,29 @@ $nomeUsuario = $_SESSION['nome_usuario'];
             right: 10px;
         }
 
-        .content.shifted {
-            transform: translateX(80px);
+        ul.nav {
+            padding-left: 0;
+        }
+
+        ul.nav ul {
+            padding-left: 0;
+        }
+
+        ul.nav ul li {
+            list-style: none;
+        }
+
+        .nav .collapse {
+            list-style-type: none;
+            padding-left: 15px;
+        }
+
+        .nav .collapse .nav-item {
+            font-size: 0.85rem; 
+        }
+
+        .nav .collapse .nav-item i {
+            margin-right: 8px;
         }
     </style>
 </head>
@@ -105,19 +129,35 @@ $nomeUsuario = $_SESSION['nome_usuario'];
         <ul class="nav flex-column">
             <?php if ($nivelAcesso == 'fornecedor'): ?>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="#clientesSubMenu" class="nav-link" data-bs-toggle="collapse">
                         <i class="fas fa-users"></i> <span>Clientes</span>
                     </a>
+                    <ul class="collapse" id="clientesSubMenu">
+                        <li class="nav-item">
+                            <a  href="index.php?page=cadastrar_cliente" class="nav-link"><i class="fas fa-user-plus"></i> Cadastrar Cliente</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link"><i class="fas fa-search"></i> Consultar Cliente</a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="#pedidosSubMenu" class="nav-link" data-bs-toggle="collapse">
                         <i class="fas fa-box"></i> <span>Pedidos</span>
                     </a>
+                    <ul class="collapse" id="pedidosSubMenu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link"><i class="fas fa-cart-plus"></i> Cadastrar Pedido</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link"><i class="fas fa-list-alt"></i> Consultar Pedido</a>
+                        </li>
+                    </ul>
                 </li>
             <?php elseif ($nivelAcesso == 'cliente'): ?>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="fas fa-box"></i> <span>Consultar Pedidos</span>
+                        <i class="fas fa-box"></i> Consultar Pedidos
                     </a>
                 </li>
             <?php endif; ?>

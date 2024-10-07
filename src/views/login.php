@@ -32,13 +32,11 @@
                 <div class="card card-login shadow-lg">
                     <div class="card-body">
                         <h2 class="text-center mb-4">Login</h2>
-
-                        <?php if (isset($error)): ?>
-                            <div class="alert alert-danger text-center">
-                                <?= htmlspecialchars($error); ?>
-                            </div>
-                        <?php endif; ?>
-
+                        <?php
+                            if (isset($_GET['senha_criada']) && $_GET['senha_criada'] == 'true') {
+                                $success = "Cadastro realizado com sucesso! Verifique seu e-mail para validar o cadastro.";
+                            }
+                            ?>
                         <form method="POST" action="index.php?page=login">
                             <div class="form-group mb-3">
                                 <label for="email">Email</label>
