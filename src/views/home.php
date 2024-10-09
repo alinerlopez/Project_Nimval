@@ -7,7 +7,7 @@ if (!isset($_SESSION['usuario'])) {
     exit();
 }
 
-$nivelAcesso = $_SESSION['nivel_acesso'];
+$nivelAcesso = $_SESSION['nivel_acesso']; 
 $nomeUsuario = $_SESSION['nome_usuario']; 
 ?>
 
@@ -31,7 +31,6 @@ $nomeUsuario = $_SESSION['nome_usuario'];
             width: 250px;
             background-color: #343a40;
             color: white;
-            transition: width 0.3s ease;
             position: relative;
         }
 
@@ -53,13 +52,17 @@ $nomeUsuario = $_SESSION['nome_usuario'];
 
         .sidebar .nav-link {
             padding: 15px;
+            font-size: 1rem;
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
         }
 
         .content {
             flex-grow: 1;
             padding: 20px;
             background-color: #f8f9fa;
-            transition: transform 0.3s ease;
         }
 
         .sidebar-toggler {
@@ -88,8 +91,29 @@ $nomeUsuario = $_SESSION['nome_usuario'];
             right: 10px;
         }
 
-        .content.shifted {
-            transform: translateX(80px);
+        ul.nav {
+            padding-left: 0;
+        }
+
+        ul.nav ul {
+            padding-left: 0;
+        }
+
+        ul.nav ul li {
+            list-style: none;
+        }
+
+        .nav .collapse {
+            list-style-type: none;
+            padding-left: 15px;
+        }
+
+        .nav .collapse .nav-item {
+            font-size: 0.85rem;
+        }
+
+        .nav .collapse .nav-item i {
+            margin-right: 8px;
         }
     </style>
 </head>
@@ -103,24 +127,48 @@ $nomeUsuario = $_SESSION['nome_usuario'];
             </button>
         </div>
         <ul class="nav flex-column">
-            <?php if ($nivelAcesso == 'fornecedor'): ?>
+            <?php if ($nivelAcesso == 'admin'): ?>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-users"></i> <span>Clientes</span>
+                    <a href="#funcionariosSubMenu" class="nav-link" data-bs-toggle="collapse">
+                        <i class="fas fa-user-tie"></i> <span>Funcionários</span>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-box"></i> <span>Pedidos</span>
-                    </a>
-                </li>
-            <?php elseif ($nivelAcesso == 'cliente'): ?>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-box"></i> <span>Consultar Pedidos</span>
-                    </a>
+                    <ul class="collapse" id="funcionariosSubMenu">
+                        <li class="nav-item">
+                            <a href="index.php?page=cadastrar_funcionario" class="nav-link"><i class="fas fa-user-plus"></i> Cadastrar Funcionário</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link"><i class="fas fa-search"></i> Consultar Funcionários</a>
+                        </li>
+                    </ul>
                 </li>
             <?php endif; ?>
+
+            <li class="nav-item">
+                <a href="#clientesSubMenu" class="nav-link" data-bs-toggle="collapse">
+                    <i class="fas fa-users"></i> <span>Clientes</span>
+                </a>
+                <ul class="collapse" id="clientesSubMenu">
+                    <li class="nav-item">
+                        <a href="index.php?page=cadastrar_cliente" class="nav-link"><i class="fas fa-user-plus"></i> Cadastrar Cliente</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link"><i class="fas fa-search"></i> Consultar Cliente</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a href="#pedidosSubMenu" class="nav-link" data-bs-toggle="collapse">
+                    <i class="fas fa-box"></i> <span>Pedidos</span>
+                </a>
+                <ul class="collapse" id="pedidosSubMenu">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link"><i class="fas fa-cart-plus"></i> Cadastrar Pedido</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link"><i class="fas fa-list-alt"></i> Consultar Pedido</a>
+                    </li>
+                </ul>
+            </li>
             <li class="nav-item">
                 <a href="#" class="nav-link">
                     <i class="fas fa-cog"></i> <span>Configurações de Conta</span>
@@ -136,15 +184,8 @@ $nomeUsuario = $_SESSION['nome_usuario'];
 
     <div class="content" id="content">
         <h1>Bem-vindo, <?php echo htmlspecialchars($nomeUsuario); ?>!</h1>
-        <?php if ($nivelAcesso == 'fornecedor'): ?>
-            <h2>Área do Fornecedor</h2>
-            <p>Aqui estão os pedidos e status gerenciados por você, como fornecedor.</p>
-        <?php elseif ($nivelAcesso == 'cliente'): ?>
-            <h2>Área do Cliente</h2>
-            <p>Veja o status de seus pedidos como cliente.</p>
-        <?php else: ?>
-            <p>Erro: Tipo de usuário desconhecido.</p>
-        <?php endif; ?>
+        <h2>Área de Trabalho</h2>
+        <p>Aqui você pode gerenciar clientes, pedidos e funcionários.</p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

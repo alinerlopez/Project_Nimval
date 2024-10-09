@@ -2,7 +2,7 @@
 require_once __DIR__ . '/controllers/LoginController.php'; 
 require_once __DIR__ . '/controllers/AuthController.php'; 
 require_once __DIR__ . '/controllers/EmpresaController.php'; 
-require_once __DIR__ . '/controllers/CadastroClienteController.php'; 
+require_once __DIR__ . '/controllers/CadastrarClienteController.php'; 
 require_once __DIR__ . '/controllers/PedidoController.php';
 require_once __DIR__ . '/controllers/SenhaController.php'; 
 require_once __DIR__ . '/controllers/HomeController.php'; 
@@ -27,6 +27,20 @@ function handleRequest($page) {
         case 'salvar_empresa': 
             $controller = new EmpresaController(); 
             $controller->salvarEmpresa(); 
+            break;
+        
+        case 'cadastrar_cliente':
+            $controller = new CadastrarClienteController();
+            $controller->cadastrarCliente();
+            break;
+
+        case 'salvar_cliente':
+            $controller = new CadastrarClienteController();
+            $controller->cadastrarCliente();
+            break;
+
+        case 'consultar_cliente':
+            
             break;
 
         case 'pedidos':  
