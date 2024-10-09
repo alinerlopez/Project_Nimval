@@ -10,13 +10,13 @@ $statusClass = "";
 
 if (isset($_GET['token']) && !empty($_GET['token'])) {
     $token = htmlspecialchars($_GET['token']); 
-    $stmt = $conn->prepare("SELECT id_usuario FROM usuarios WHERE token_confirmacao = ? AND email_validado = 0");
+    $stmt = $conn->prepare("SELECT id_usuario FROM funcionarios WHERE token_confirmacao = ? AND email_validado = 0");
     $stmt->bind_param("s", $token);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $stmt = $conn->prepare("UPDATE usuarios SET email_validado = 1, token_confirmacao = '' WHERE token_confirmacao = ?");
+        $stmt = $conn->prepare("UPDATE funcionarios SET email_validado = 1, token_confirmacao = '' WHERE token_confirmacao = ?");
         $stmt->bind_param("s", $token);
         $stmt->execute();
 
