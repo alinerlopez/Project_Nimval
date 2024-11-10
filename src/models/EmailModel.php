@@ -38,14 +38,14 @@ class EmailModel {
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
             $mail->Port       = getenv('SMTP_PORT');
 
-            $mail->setFrom(getenv('SMTP_FROM_EMAIL'), getenv('SMTP_FROM_NAME'));
+            $mail->setFrom('no-reply@nimval.com', 'Nimval Rastreamentos');
             $mail->addAddress($email); 
 
             $mail->isHTML(true);
             $mail->Subject = 'Confirme seu e-mail';
 
             require_once __DIR__ . '/../utils/email_template.php';
-            $mail->Body    = emailLayout($nome, $linkConfirmacao);
+            $mail->Body    = emailConfirmacao($nome, $linkConfirmacao);
             $mail->AltBody = "Olá, $nome\n\nObrigado por se cadastrar em nosso sistema. Para ativar sua conta, copie e cole o link abaixo em seu navegador:\n\n$linkConfirmacao\n\nSe você não se cadastrou, ignore este e-mail.";
 
             $mail->send();
@@ -56,9 +56,8 @@ class EmailModel {
             return false;
         }
     }
-    public static function enviarEmailComSenha($nome, $email, $senha, $linkConfirmacao) {
-        self::loadEnv(__DIR__ . '/../../.env');  
-        
+    public static function enviarEmailComSenha($nome_cliente, $email_cliente, $senha_gerada, $linkLogin) {
+        self::loadEnv(__DIR__ . '/../../.env');
         $mail = new PHPMailer(true);
     
         try {
@@ -68,36 +67,24 @@ class EmailModel {
             $mail->Username   = getenv('SMTP_USERNAME');
             $mail->Password   = getenv('SMTP_PASSWORD');
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-            $mail->Port       = getenv('SMTP_PORT');
+            $mail->Port       = getenv('SMTP_PORT'); 
     
-            $mail->setFrom(getenv('SMTP_FROM_EMAIL'), getenv('SMTP_FROM_NAME'));
-            $mail->addAddress($email); 
-    
+            $mail->setFrom('no-reply@nimval.com', 'Nimval Rastreamentos');
+            $mail->addAddress($email_cliente);
             $mail->isHTML(true);
-            $mail->Subject = 'Acesso ao Sistema';
-    
-            $mail->Body = "
-                <html>
-                <head><style>.email-container {font-family: Arial;}</style></head>
-                <body>
-                    <div class='email-container'>
-                        <p>Olá, <strong>$nome</strong>,</p>
-                        <p>Sua conta foi criada com sucesso. Use a senha abaixo para acessar o sistema:</p>
-                        <p><strong>Senha: $senha</strong></p>
-                        <p>Recomendamos que você altere sua senha após o primeiro login.</p>
-                    </div>
-                </body>
-                </html>";
-            $mail->AltBody = "Olá, $nome. Sua senha é: $senha. Altere após o primeiro login.";
+            $mail->Subject = "Bem-vindo, $nome_cliente! Sua senha de acesso";
+            
+            require_once __DIR__ . '/../utils/email_template.php';
+            $mail->Body = emailSenhaLayout($nome_cliente, $senha_gerada, $linkLogin);
+            $mail->AltBody = "Olá, $nome_cliente!\n\nAqui está sua senha: $senha_gerada\nAcesse: $linkLogin\nPor segurança, altere sua senha no primeiro acesso.";
     
             $mail->send();
-            error_log('E-mail com a senha enviado.');
-            return true;
+            return true; 
         } catch (Exception $e) {
-            error_log("Erro ao enviar o e-mail com a senha: {$mail->ErrorInfo}");
+            error_log("Erro ao enviar o e-mail: {$mail->ErrorInfo}");
             return false;
         }
-    }
+    }    
     
 }
 ?>
