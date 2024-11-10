@@ -17,13 +17,25 @@
 
     <div class="container mt-5">
 
-        <?php if (isset($_GET['email_validado']) && $_GET['email_validado'] == 'true'): ?>
+        <?php if (isset($_GET['email_validado']) && $_GET['email_validado'] === 1): ?>
             <div class="alert alert-success text-center">
                 Seu e-mail foi validado com sucesso! Agora você pode fazer login.
             </div>
-        <?php elseif (isset($_GET['email_validado']) && $_GET['email_validado'] == 'false'): ?>
+        <?php elseif (isset($_GET['email_validado']) && $_GET['email_validado'] === 0): ?>
             <div class="alert alert-danger text-center">
                 O token de validação é inválido ou expirou.
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($error) && !empty($error)): ?>
+            <div class="alert alert-danger text-center">
+                <?= htmlspecialchars($error); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($success) && !empty($success)): ?>
+            <div class="alert alert-success text-center">
+                <?= htmlspecialchars($success); ?>
             </div>
         <?php endif; ?>
 
@@ -32,11 +44,7 @@
                 <div class="card card-login shadow-lg">
                     <div class="card-body">
                         <h2 class="text-center mb-4">Login</h2>
-                        <?php
-                            if (isset($_GET['senha_criada']) && $_GET['senha_criada'] == 'true') {
-                                $success = "Cadastro realizado com sucesso! Verifique seu e-mail para validar o cadastro.";
-                            }
-                            ?>
+
                         <form method="POST" action="index.php?page=login">
                             <div class="form-group mb-3">
                                 <label for="email">Email</label>
@@ -48,7 +56,7 @@
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Entrar</button>
                         </form>
-                        
+
                         <div class="text-center mt-3">
                             <p>Ainda não tem uma conta? <a href="index.php?page=empresa_cadastro">Cadastre sua empresa</a></p>
                         </div>

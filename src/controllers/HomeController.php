@@ -24,9 +24,6 @@ class HomeController {
             require_once __DIR__ . '/../views/cliente_home.php'; 
         } else {
             echo "Erro: Tipo de usuário desconhecido.";
-            //session_unset(); 
-            //session_destroy(); 
-            //header('Location: index.php?page=login');
             exit();
         }
     }

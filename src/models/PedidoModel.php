@@ -1,9 +1,9 @@
 <?php
-require_once '../config/config.php';  
+require_once __DIR__ . '/../database/Database.php';  
 
 class PedidoModel {
     public static function getAll() {
-        global $pdo;
+        $pdo = Database::getConnection();
         try {
             $stmt = $pdo->prepare("SELECT * FROM pedido");
             $stmt->execute();

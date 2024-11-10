@@ -9,43 +9,57 @@
 <body>
     <div class="container mt-5">
         <h2 class="text-center mb-4">Cadastro de Cliente</h2>
-        <?php if (isset($error)): ?>
-            <div class="alert alert-danger text-center">
-                <?= htmlspecialchars($error); ?>
+        <?php
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (isset($_SESSION['error'])): ?>
+            <div class="alert alert-danger text-center" id="error-message">
+                <?= htmlspecialchars($_SESSION['error']); ?>
+                <?php unset($_SESSION['error']); ?>
+            </div>
+        <?php endif; ?>
+        <?php if (isset($_SESSION['success'])): ?>
+            <div class="alert alert-success text-center" id="success-message">
+                <?= htmlspecialchars($_SESSION['success']); ?>
+                <?php unset($_SESSION['success']); ?>
             </div>
         <?php endif; ?>
 
-        <?php if (isset($success)): ?>
-            <div class="alert alert-success text-center">
-                <?= htmlspecialchars($success); ?>
+        <form method="POST" action="index.php?page=cadastrar_cliente">
+            <div class="form-group mb-3">
+                <label for="nome">Nome</label>
+                <input type="text" class="form-control" id="nome" name="nome" autocomplete="off" required>
             </div>
-        <?php endif; ?>
-
-            <form method="POST" action="index.php?page=cadastrar_cliente">
-        <div class="form-group mb-3">
-            <label for="nome">Nome</label>
-            <input type="text" class="form-control" name="nome" required>
-        </div>
-        <div class="form-group mb-3">
-            <label for="cpf">CPF</label>
-            <input type="text" class="form-control" name="cpf" required>
-        </div>
-        <div class="form-group mb-3">
-            <label for="telefone">Telefone</label>
-            <input type="text" class="form-control" name="telefone" required>
-        </div>
-        <div class="form-group mb-3">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" name="email" required>
-        </div>
-        <div class="form-group mb-3">
-            <label for="senha">Senha</label>
-            <input type="password" class="form-control" name="senha" required>
-        </div>
-        <button type="submit" class="btn btn-primary w-100">Cadastrar Cliente</button>
-    </form>
-
+            <div class="form-group mb-3">
+                <label for="cpf">CPF</label>
+                <input type="text" class="form-control" id="cpf" name="cpf" autocomplete="off" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="telefone">Telefone</label>
+                <input type="text" class="form-control" id="telefone" name="telefone" autocomplete="off" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" autocomplete="off" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Cadastrar Cliente</button>
+        </form>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#cpf').mask('000.000.000-00');
+            $('#telefone').mask('(00) 00000-0000');
+            setTimeout(function() {
+                $('#error-message').fadeOut('slow');
+            }, 800);
+        });
+    </script>
+
     <script src="/Project_Nimval/public/assets/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

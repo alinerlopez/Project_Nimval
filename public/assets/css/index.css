@@ -1,4 +1,4 @@
-/* Configuração global para garantir a responsividade em todos os dispositivos */
+
 * {
   box-sizing: border-box;
 }
@@ -11,7 +11,6 @@ body, html {
   font-family: 'Arial', sans-serif;
 }
 
-/* Tamanhos de texto e margens globais */
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
   padding: 0;
@@ -19,21 +18,19 @@ h1, h2, h3, h4, h5, h6 {
 
 .container {
   width: 100%;
-  max-width: 1200px; /* Limita a largura máxima em telas grandes */
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 15px; /* Padding lateral em telas menores */
+  padding: 0 15px; 
 }
 
-/* Centralizar o card de login */
 .full-height-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 60px); /* Altura ajustada para evitar rolagem */
+  height: calc(100vh - 60px); 
   padding: 0 15px;
 }
 
-/* Estilização do card de login */
 .card-login {
   max-width: 400px;
   width: 100%;
@@ -43,14 +40,13 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 8px;
 }
 
-/* Ajustes responsivos para o header */
 header {
   padding: 10px 0;
-  background-color: #0056b3; /* Azul mais escuro */
+  background-color: #001133; 
 }
 
 h2.text-start {
-  font-size: 1.5rem; /* Tamanho do texto do header */
+  font-size: 1.5rem; 
   font-weight: bold;
   margin: 0;
   color: white;
