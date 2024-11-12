@@ -7,39 +7,53 @@ class LoginController {
             session_start();
         }
 
+        if (isset($_SESSION['usuario'])) {
+          
+            $redirectPage = ($_SESSION['perfil'] === 'fornecedor') ? 'home' : 'home_cliente';
+            header("Location: index.php?page=$redirectPage");
+            exit();
+        }
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $email = trim($_POST['email']);
             $senha = trim($_POST['senha']);
+            $perfil = isset($_POST['perfil']) ? trim($_POST['perfil']) : null;
 
-            $user = LoginModel::findUserByEmail($email);
+            if (!$perfil) {
+                header('Location: selecionar_perfil.php');
+                exit();
+            }
 
-            if (!$user) {
-                $error = "E-mail não encontrado.";
+            if ($perfil !== 'cliente' && $perfil !== 'fornecedor') {
+                $error = "Perfil inválido.";
                 include __DIR__ . '/../views/login.php';
                 return;
             }
 
-            if ((int)$user['email_validado'] !== 1) {
+            $user = LoginModel::findUserByEmailAndPerfil($email, $perfil);
+            if (!$user) {
+                $error = "Dados inválidos.";
+                include __DIR__ . '/../views/login.php';
+                return;
+            }
+
+            if ($perfil === 'fornecedor' && (int)$user['email_validado'] !== 1) {
                 $error = "Seu e-mail ainda não foi validado. Verifique sua caixa de entrada.";
                 include __DIR__ . '/../views/login.php';
                 return;
             }
 
             if (password_verify($senha, $user['senha'])) {
-                $_SESSION['usuario'] = $user['id_usuario'];
+                $_SESSION['usuario'] = $user['id'] ?? null;
                 $_SESSION['nome_usuario'] = $user['nome'];
-                $_SESSION['nivel_acesso'] = $user['nivel_acesso'];
+                $_SESSION['perfil'] = $perfil;
+                $_SESSION['tipo_usuario'] = ($perfil === 'cliente') ? 'cliente' : 'funcionario';
 
-                if ($user['nivel_acesso'] == 'admin' || $user['nivel_acesso'] == 'operador') {
-                    $_SESSION['tipo_usuario'] = 'funcionario';
-                } else {
-                    $_SESSION['tipo_usuario'] = 'cliente';
-                }
-
-                header('Location: index.php?page=home');
+                $redirectPage = ($perfil === 'fornecedor') ? 'home' : 'home_cliente';
+                header("Location: index.php?page=$redirectPage");
                 exit();
             } else {
-                $error = "Senha incorreta.";
+                $error = "Dados inválidos.";
                 include __DIR__ . '/../views/login.php';
                 return;
             }
@@ -58,3 +72,4 @@ class LoginController {
         exit();
     }
 }
+?>
