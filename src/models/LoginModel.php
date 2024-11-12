@@ -1,7 +1,8 @@
 <?php
-require_once __DIR__ . '/../database/Database.php';
+require_once __DIR__ . '/../database/Database.php';  
 
 class LoginModel {
+
     public static function findUserByEmailAndPerfil($email, $perfil) {
         if ($perfil === 'cliente') {
             return self::findClienteByEmail($email);
@@ -15,6 +16,11 @@ class LoginModel {
 
     private static function findClienteByEmail($email) {
         $pdo = Database::getConnection();
+        
+        if (!$pdo) {
+            error_log('Erro ao conectar com o banco de dados.');
+            return false;
+        }
 
         try {
             $stmt = $pdo->prepare("
@@ -27,13 +33,18 @@ class LoginModel {
 
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Erro ao buscar cliente por e-mail: " . $e->getMessage());
+            self::logDatabaseError('cliente', $e);
             return false;
         }
     }
 
     private static function findFornecedorByEmail($email) {
         $pdo = Database::getConnection();
+
+        if (!$pdo) {
+            error_log('Erro ao conectar com o banco de dados.');
+            return false;
+        }
 
         try {
             $stmt = $pdo->prepare("
@@ -44,11 +55,23 @@ class LoginModel {
             $stmt->bindParam(':email', $email);
             $stmt->execute();
 
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($result) {
+                if (!isset($result['nivel_acesso']) || is_null($result['nivel_acesso'])) {
+                    error_log('Nivel de acesso não encontrado ou é nulo para o fornecedor: ' . $result['id']);
+                }
+            }
+
+            return $result;
         } catch (PDOException $e) {
-            error_log("Erro ao buscar fornecedor por e-mail: " . $e->getMessage());
+            self::logDatabaseError('fornecedor', $e);
             return false;
         }
     }
-}
 
+    private static function logDatabaseError($userType, $e) {
+        error_log("Erro ao buscar $userType por e-mail: " . $e->getMessage());
+    }
+}
+?>
