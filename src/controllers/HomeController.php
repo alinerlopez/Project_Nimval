@@ -21,11 +21,10 @@ class HomeController {
                 exit();
             }
         } elseif ($tipoUsuario === 'cliente') {
-            require_once __DIR__ . '/../views/cliente_home.php'; 
+            require_once __DIR__ . '/../views/home_cliente.php';
         } else {
             echo "Erro: Tipo de usuário desconhecido.";
             exit();
         }
     }
 }
-

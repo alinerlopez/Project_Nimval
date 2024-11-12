@@ -24,23 +24,9 @@ function handleRequest($page) {
             $controller->cadastrar();
             break;
 
-        case 'salvar_empresa': 
-            $controller = new EmpresaController(); 
-            $controller->salvarEmpresa(); 
-            break;
-        
         case 'cadastrar_cliente':
             $controller = new CadastrarClienteController();
             $controller->cadastrarCliente();
-            break;
-
-        case 'salvar_cliente':
-            $controller = new CadastrarClienteController();
-            $controller->cadastrarCliente();
-            break;
-
-        case 'consultar_cliente':
-            
             break;
 
         case 'pedidos':  
@@ -64,12 +50,17 @@ function handleRequest($page) {
             break;
 
         case 'home': 
+        case 'home_cliente':  
             $controller = new HomeController();
             $controller->index();
             break;
 
-        default:
-            echo "Página não encontrada!";
+        case 'selecionar_perfil':
+            include __DIR__ . '/../public/selecionar_perfil.php';
             break;
+
+        default:
+            header('Location: /selecionar_perfil.php');
+            exit;
     }
 }
