@@ -153,7 +153,7 @@ $nomeUsuario = $_SESSION['nome_usuario'];
                         <a href="index.php?page=cadastrar_cliente" class="nav-link"><i class="fas fa-user-plus"></i> Cadastrar Cliente</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link"><i class="fas fa-search"></i> Consultar Cliente</a>
+                        <a href="index.php?page=editar_clientes" class="nav-link"><i class="fas fa-search"></i> Consultar Cliente</a>
                     </li>
                 </ul>
             </li>
@@ -163,7 +163,7 @@ $nomeUsuario = $_SESSION['nome_usuario'];
                 </a>
                 <ul class="collapse" id="pedidosSubMenu">
                     <li class="nav-item">
-                        <a href="#" class="nav-link"><i class="fas fa-cart-plus"></i> Cadastrar Pedido</a>
+                        <a href="index.php?page=cad_pedidos" class="nav-link"><i class="fas fa-cart-plus"></i> Cadastrar Pedido</a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link"><i class="fas fa-list-alt"></i> Consultar Pedido</a>

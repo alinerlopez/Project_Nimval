@@ -5,7 +5,9 @@ require_once __DIR__ . '/controllers/EmpresaController.php';
 require_once __DIR__ . '/controllers/CadastrarClienteController.php'; 
 require_once __DIR__ . '/controllers/PedidoController.php';
 require_once __DIR__ . '/controllers/SenhaController.php'; 
-require_once __DIR__ . '/controllers/HomeController.php'; 
+require_once __DIR__ . '/controllers/HomeController.php';
+require_once __DIR__ . '/controllers/ClienteController.php';
+
 
 function handleRequest($page) {
     switch ($page) {
@@ -54,10 +56,25 @@ function handleRequest($page) {
             $controller = new HomeController();
             $controller->index();
             break;
-
+            
         case 'selecionar_perfil':
             include __DIR__ . '/../public/selecionar_perfil.php';
             break;
+        
+        case 'cad_pedidos':
+            $controller = new PedidoController();
+            $controller->exibirCadastroPedido();
+            break;
+        
+        case 'editar_clientes':
+            $controller = new ClienteController();
+            $controller->exibirConsultaClientes();
+            break;
+
+        case 'atualizar_cliente':
+            $controller = new ClienteController();
+            $controller->atualizarCliente();
+            break;    
 
         default:
             header('Location: /selecionar_perfil.php');
