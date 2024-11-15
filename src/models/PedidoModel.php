@@ -1,48 +1,46 @@
-
 <?php
-class PedidoModel {
-    private static function conectar() {
-        $conexao = new mysqli("localhost", "root", "", "seu_banco");
-        if ($conexao->connect_error) {
-            die("Falha na conexão: " . $conexao->connect_error);
-        }
-        return $conexao;
-    }
+require_once __DIR__ . '/../database/Database.php';
 
-    public static function getClientes() {
-        $conexao = self::conectar();
-        $query = "SELECT id_cliente, nome_cliente FROM clientes";
-        $result = $conexao->query($query);
-        $clientes = [];
-        while ($row = $result->fetch_assoc()) {
-            $clientes[] = $row;
-        }
-        $conexao->close();
-        return $clientes;
-    }
+class PedidoModel {
 
     public static function getStatus() {
-        $conexao = self::conectar();
+        $pdo = Database::getConnection(); 
+
         $query = "SELECT id_status, descricao_status FROM status_pedidos";
-        $result = $conexao->query($query);
-        $statusList = [];
-        while ($row = $result->fetch_assoc()) {
-            $statusList[] = $row;
+        $stmt = $pdo->prepare($query);  
+        
+        if ($stmt->execute()) {
+            return $stmt->fetchAll(PDO::FETCH_ASSOC); 
         }
-        $conexao->close();
-        return $statusList;
+        
+        return []; 
     }
 
-    public static function cadastrarPedido($id_cliente, $id_fornecedor, $descricao_pedido, $status_pedido, $data_pedido) {
-        $conexao = self::conectar();
-        $query = "INSERT INTO pedido (id_cliente, id_fornecedor, descricao_pedido, status_pedido, data_pedido) 
+    public static function cadastrarPedido($id_cliente, $id_fornecedor, $descricao_pedido, $data_pedido, $num_pedido) {
+      
+        $pdo = Database::getConnection(); 
+        if (!$pdo) {
+            error_log("Erro ao conectar com o banco de dados.");
+            return false;
+        }
+
+        $query = "INSERT INTO pedido (id_cliente, id_fornecedor, descricao_pedido, numero_pedido, data_pedido) 
                   VALUES (?, ?, ?, ?, ?)";
-        $stmt = $conexao->prepare($query);
-        $stmt->bind_param("iisis", $id_cliente, $id_fornecedor, $descricao_pedido, $status_pedido, $data_pedido);
-        $result = $stmt->execute();
-        $stmt->close();
-        $conexao->close();
-        return $result;
+
+        $stmt = $pdo->prepare($query);
+
+        $stmt->bindValue(1, $id_cliente, PDO::PARAM_INT);
+        $stmt->bindValue(2, $id_fornecedor, PDO::PARAM_INT);
+        $stmt->bindValue(3, $descricao_pedido, PDO::PARAM_STR);
+        $stmt->bindValue(4, $num_pedido, PDO::PARAM_STR);  
+        $stmt->bindValue(5, $data_pedido, PDO::PARAM_STR);  
+
+        if ($stmt->execute()) {
+            return true;  
+        } else {
+            error_log("Erro ao executar a consulta: " . implode(", ", $stmt->errorInfo()));  
+            return false;  
+        }
     }
 }
 ?>

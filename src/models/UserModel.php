@@ -91,7 +91,7 @@ class UserModel {
     public static function findClientByEmail($email) {
         $pdo = Database::getConnection();
         try {
-            $stmt = $pdo->prepare("SELECT id_cliente, nome, email, senha 
+            $stmt = $pdo->prepare("SELECT id_cliente, nome, email
                                    FROM clientes WHERE email = :email");
             $stmt->bindParam(':email', $email);
             $stmt->execute();
@@ -105,7 +105,7 @@ class UserModel {
     public static function findClientByCPF($cpf) {
         $pdo = Database::getConnection();
         try {
-            $stmt = $pdo->prepare("SELECT id_cliente, nome, email, senha 
+            $stmt = $pdo->prepare("SELECT id_cliente, nome, email, cpf 
                                    FROM clientes WHERE cpf = :cpf");
             $stmt->bindParam(':cpf', $cpf);
             $stmt->execute();

@@ -1,0 +1,35 @@
+:root {
+  /* azul */
+  --azul-principal: #007bff; /* Azul principal */
+  --azul-escuro: #003f7f; /* Azul escuro */
+  --azul-claro: #7ba1d1; /* Azul claro */
+  
+  /* cinza */
+  
+  --cinza-escuro: #343a40; /* Cinza escuro */
+  --cinza-medio2: #495057
+  --cinza-medio: #6c757d;
+  --cinza-claro2: #adb5bd; /* Cinza claro para o texto */
+  --cinza-claro: #e9ecef;
+  
+  /* branco */
+  --gelo: #f8f9fa; /* Cor de fundo clara */
+  --borda-clara: #ddd; 
+  --branco: #ffffff; /* Branco */
+
+  /* Cores de alertas */
+  --alerta-sucesso: #28a745; /* Verde para sucesso */
+  --alerta-sucesso-hover: #218838; /* Hover do sucesso */
+  --alerta-erro: #dc3545; /* Vermelho para erro */
+  --alerta-erro-hover: #c82333; /* Hover do erro */
+  --alerta-info: #17a2b8; /* Azul para informações */
+  --alerta-info-hover: #138496; /* Hover de info */
+  --alerta-warning: #ffc107; /* Amarelo para warning */
+  --alerta-warning-hover: #e0a800; /* Hover de warning */
+
+  /* preto */
+
+  --preto:  #000;
+  
+  
+}
