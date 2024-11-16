@@ -28,7 +28,6 @@
             border-color: #dc3545;
         }
 
-        /* Ícones de validação */
         .validation-icon {
             position: absolute;
             right: 10px;

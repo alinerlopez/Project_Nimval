@@ -6,7 +6,7 @@
 $perfil = isset($_GET['perfil']) ? $_GET['perfil'] : (isset($_SESSION['perfil']) ? $_SESSION['perfil'] : null);
 
 if (!$perfil) {
-    header('Location: selecionar_perfil.php');
+    header('Location: /Project_Nimval/public/selecionar_perfil.php');
     exit();
 }
 
@@ -20,7 +20,6 @@ $_SESSION['perfil'] = $perfil;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="/Project_Nimval/public/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/Project_Nimval/public/assets/css/global.css"> 
 </head>
 <body>
 

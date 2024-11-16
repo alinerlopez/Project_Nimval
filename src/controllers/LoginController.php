@@ -26,11 +26,12 @@ class LoginController {
 
             if ($perfil !== 'cliente' && $perfil !== 'fornecedor') {
                 $error = "Perfil inválido.";
-                include __DIR__ . '/../views/login.php';
+                include __DIR__ . '/../views/selecionar_perfil.php';
                 return;
             }
 
             $user = LoginModel::findUserByEmailAndPerfil($email, $perfil);
+
             if (!$user) {
                 $error = "Dados inválidos.";
                 include __DIR__ . '/../views/login.php';
@@ -42,26 +43,27 @@ class LoginController {
                 include __DIR__ . '/../views/login.php';
                 return;
             }
-
-            if (password_verify($senha, $user['senha'])) {
-                $_SESSION['usuario'] = $user['id'] ?? null;
+            if ($user && password_verify($senha, $user['senha'])) {
+                $_SESSION['usuario'] = $user['id'];
                 $_SESSION['nome_usuario'] = $user['nome'];
-                $_SESSION['perfil'] = $perfil;
+                $_SESSION['perfil'] = 'fornecedor';
+                $_SESSION['id_fornecedor'] = $user['id_fornecedor'];
+                $_SESSION['nivel_acesso'] = $user['nivel_acesso'];
                 $_SESSION['tipo_usuario'] = ($perfil === 'cliente') ? 'cliente' : 'funcionario';
 
                 $redirectPage = ($perfil === 'fornecedor') ? 'home' : 'home_cliente';
                 header("Location: index.php?page=$redirectPage");
                 exit();
             } else {
-                $error = "Dados inválidos.";
+                $error = "Dados inválidos ou perfil incorreto.";
                 include __DIR__ . '/../views/login.php';
                 return;
             }
-        } else {
+            } else {
             include __DIR__ . '/../views/login.php';
         }
     }
-
+    
     public function logout() {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
