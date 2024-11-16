@@ -123,7 +123,7 @@
                     <a href="index.php?page=cad_pedidos" class="nav-link"><i class="fas fa-cart-plus"></i> Cadastrar Pedido</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link"><i class="fas fa-list-alt"></i> Consultar Pedido</a>
+                    <a href="index.php?page=pedidos" class="nav-link"><i class="fas fa-list-alt"></i> Consultar Pedido</a>
                 </li>
             </ul>
         </li>

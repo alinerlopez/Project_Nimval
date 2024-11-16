@@ -35,12 +35,38 @@ if (!isset($_SESSION['usuario'])) {
         h2 {
             color: #343a40;
         }
+        .alert {
+            position: fixed; /* Fixa o alerta no topo da tela */
+            top: 20px; /* Distância do topo */
+            left: 50%; /* Centraliza horizontalmente */
+            transform: translateX(-50%); /* Ajusta a posição central */
+            z-index: 1050; /* Garante que fique sobre outros elementos */
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-out;
+            width: 90%; 
+            max-width: 400px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <?php include __DIR__ . '/../utils/sidebar_fornecedor.php'; ?>
 
     <div class="content">
+        <?php if (isset($_SESSION['error'])): ?>
+                <div class="alert alert-danger text-center" id="error-message">
+                    <?= htmlspecialchars($_SESSION['error']); ?>
+                    <?php unset($_SESSION['error']); ?>
+                </div>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['success'])): ?>
+                <div class="alert alert-success text-center" id="success-message">
+                    <?= htmlspecialchars($_SESSION['success']); ?>
+                    <?php unset($_SESSION['success']); ?>
+                </div>
+            <?php endif; ?>
         <div class="container mt-5">
             <h2 class="text-center mb-4">Cadastro de Cliente</h2>
             <?php if (isset($_SESSION['error'])): ?>

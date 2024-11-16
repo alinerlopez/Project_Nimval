@@ -1,9 +1,9 @@
 <?php
+require_once __DIR__ . '/../models/UserModel.php';
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-
-require_once __DIR__ . '/../models/UserModel.php';
 
 if (isset($_POST['cpf'])) {
     $cpf = $_POST['cpf'];
@@ -23,17 +23,20 @@ if (isset($_POST['cpf'])) {
 <head>
     <meta charset="UTF-8">
     <title>Cadastro de Pedido</title>
+    <link href="/Project_Nimval/public/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/Project_Nimval/public/assets/css/sidebar_fornecedor.css" rel="stylesheet">
     <style>
         body {
             display: flex;
             margin: 0;
             height: 100vh;
             font-family: Arial, sans-serif;
+            overflow: hidden;
         }
 
         .content {
             flex-grow: 1;
-            padding: 30px;
+            padding: 20px;
             background-color: #f8f9fa;
             overflow-y: auto;
         }
@@ -111,7 +114,6 @@ if (isset($_POST['cpf'])) {
         transform: scale(0.98);
     }
 
-    /* Responsividade */
     @media (max-width: 600px) {
         .client-card {
             width: 100%;
@@ -201,7 +203,7 @@ if (isset($_POST['cpf'])) {
         margin-bottom: 15px;
         border-radius: 6px;
         border: 1px solid #ccc;
-        resize: vertical; /* Permite que o usuário redimensione a altura */
+        resize: vertical;
         box-sizing: border-box;
         transition: all 0.3s ease;
     }
@@ -210,7 +212,6 @@ if (isset($_POST['cpf'])) {
         box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
     }
 
-    /* Estilo do campo de data (sem hora) */
     .modal-content input[type="date"] {
         font-size: 14px;
         padding: 12px;
@@ -226,27 +227,56 @@ if (isset($_POST['cpf'])) {
         border-color: #007bff;
         box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
     }
+    .alert {
+    position: fixed; /* Fixa o alerta no topo da tela */
+    top: 20px; /* Distância do topo */
+    left: 50%; /* Centraliza horizontalmente */
+    transform: translateX(-50%); /* Ajusta a posição central */
+    z-index: 1050; /* Garante que fique sobre outros elementos */
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-out;
+    width: 90%; /* Ajuste conforme necessário */
+    max-width: 400px;
+    text-align: center;
+}
 
     </style>
 </head>
 <body>
 <?php include __DIR__ . '/../utils/sidebar_fornecedor.php'; ?>
+
 <div class="content">
-    <h2>Cadastro de Pedido</h2>
+    <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger text-center" id="error-message">
+            <?= htmlspecialchars($_SESSION['error']); ?>
+            <?php unset($_SESSION['error']); ?>
+        </div>
+    <?php endif; ?>
+    <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success text-center" id="success-message">
+            <?= htmlspecialchars($_SESSION['success']); ?>
+            <?php unset($_SESSION['success']); ?>
+        </div>
+    <?php endif; ?>
+    <div class="container mt-5">
+        <h2>Cadastro de Pedido</h2>
+        
+        <div class="search-container">
+            <input type="text" id="cpf" placeholder="Digite o CPF do cliente" maxlength="14">
+            <button onclick="buscarCliente()">Buscar</button>
+        </div>
 
-    <div class="search-container">
-        <input type="text" id="cpf" placeholder="Digite o CPF do cliente" maxlength="14">
-        <button onclick="buscarCliente()">Buscar</button>
+        <div id="clienteEncontrado" style="display: none;">
+        <div class="client-card">
+            <h3 id="clientName"></h3>
+            <p><strong>CPF:</strong> <span id="clientCpf"></span></p>
+            <p><strong>Email:</strong> <span id="clientEmail"></span></p>
+            <button class="btn" onclick="openPedidoForm()">Cadastrar Pedido</button>
+        </div>
+        </div>
     </div>
-
-    <div id="clienteEncontrado" style="display: none;">
-    <div class="client-card">
-        <h3 id="clientName"></h3>
-        <p><strong>CPF:</strong> <span id="clientCpf"></span></p>
-        <p><strong>Email:</strong> <span id="clientEmail"></span></p>
-        <button class="btn" onclick="openPedidoForm()">Cadastrar Pedido</button>
-    </div>
-</div>
 
    
 <div id="pedidoModal" class="modal">
@@ -254,14 +284,14 @@ if (isset($_POST['cpf'])) {
         <span class="close" onclick="closePedidoForm()">&times;</span>
         <h3 id="modalTitle">Cadastrar Pedido para <span id="clienteNome"></span></h3>
 
-        <form action="../views/cad_pedidos.php" method="post">
+        <form action="index.php?page=cadastrar_pedido" method="post">
             <input type="hidden" id="id_cliente" name="id_cliente">
 
             <label for="numeroPedido">Número do Pedido:</label>
-            <input type="number" id="num_pedido" name="num_pedido">
+            <input type="text" id="num_pedido" name="num_pedido" required>
             
             <label for="descricao">Descrição do Pedido:</label>
-            <textarea id="descricao" name="descricao_pedido" rows="6" required></textarea>
+            <textarea id="descricao" name="descricao_pedido" rows="6" maxlength="180" required></textarea>
 
             <label for="data_pedido">Data do Pedido:</label>
             <input type="date" id="data_pedido" name="data_pedido" required>
@@ -275,7 +305,7 @@ if (isset($_POST['cpf'])) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
 <script>
-       $(document).ready(function() {
+    $(document).ready(function() {
     $('#cpf').mask('000.000.000-00');
     setTimeout(function() {
         $('#error-message').fadeOut('slow');
@@ -284,36 +314,44 @@ if (isset($_POST['cpf'])) {
 });
 
 function buscarCliente() {
-    const cpf = document.getElementById('cpf').value;
+    const cpf = $('#cpf').val(); 
 
-    if (cpf.length === 14) {
-        const formData = new FormData();
-        formData.append('cpf', cpf); 
-
-        fetch('../src/views/cad_pedidos.php', {  
+    if (cpf.length === 14) { 
+        $.ajax({
+            url: '/Project_Nimval/src/views/cad_pedidos.php', 
             method: 'POST',
-            body: formData
-        })
-        .then(response => response.json()) 
-        .then(data => {
-            console.log('Dados recebidos:', data);  
+            data: { cpf: cpf },
+            success: function(data) {
+                console.log('Resposta recebida:', data);  
+                try {
+                    const jsonData = JSON.parse(data); 
+                    console.log("Dados JSON processados:", jsonData); 
 
-            if (data.error) {
-                alert(data.error);
-                document.getElementById('clienteEncontrado').style.display = 'none';
-            } else {
-                document.getElementById('clientName').innerText = data.nome;
-                document.getElementById('clientCpf').innerText = data.cpf; 
-                document.getElementById('clientEmail').innerText = data.email;
-                document.getElementById('clienteEncontrado').style.display = 'block';
-                document.getElementById('id_cliente').value = data.id_cliente;
+                    if (jsonData.error) {
+                        alert(jsonData.error);
+                        $('#clienteEncontrado').hide();
+                    } else {
+                        $('#clientName').text(jsonData.nome);
+                        $('#clientCpf').text(jsonData.cpf);
+                        $('#clientEmail').text(jsonData.email);
+                        $('#clienteEncontrado').show();
+                        $('#id_cliente').val(jsonData.id_cliente);
+                    }
+                } catch (error) {
+                    console.error('Erro ao processar resposta JSON:', error);
+                    alert('Erro ao processar a resposta do servidor.');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Erro ao fazer a requisição AJAX:', error);
+                alert('Erro ao buscar o cliente.');
             }
-        })
-        .catch(error => console.error('Erro ao buscar cliente:', error));
+        });
     } else {
         alert('Por favor, insira um CPF válido.');
     }
 }
+
 
     function openPedidoForm() {
         const clienteNome = document.getElementById('clientName').innerText;
@@ -331,6 +369,7 @@ function buscarCliente() {
         }
     }
 </script>
+<script src="/Project_Nimval/public/assets/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

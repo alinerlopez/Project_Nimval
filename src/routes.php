@@ -8,7 +8,6 @@ require_once __DIR__ . '/controllers/SenhaController.php';
 require_once __DIR__ . '/controllers/HomeController.php';
 require_once __DIR__ . '/controllers/ClienteController.php';
 
-
 function handleRequest($page) {
     switch ($page) {
         case 'login':  
@@ -33,7 +32,7 @@ function handleRequest($page) {
 
         case 'pedidos':  
             $controller = new PedidoController();
-            $controller->index();
+            $controller->exibirPedidos();
             break;
 
         case 'criar_senha':  
@@ -63,7 +62,7 @@ function handleRequest($page) {
         
         case 'cad_pedidos':
             $controller = new PedidoController();
-            $controller->exibirCadastroPedido();
+            $controller->cadastrarPedido();
             break;
         
         case 'editar_clientes':
@@ -74,10 +73,16 @@ function handleRequest($page) {
         case 'atualizar_cliente':
             $controller = new ClienteController();
             $controller->atualizarCliente();
-            break;    
+            break;
+            
+        case 'cadastrar_pedido':
+            $controller = new PedidoController();
+            $controller->cadastrarPedido();
+            break;
 
         default:
-            header('Location: /selecionar_perfil.php');
+            header('HTTP/1.1 404 Not Found');
+            include __DIR__ . '/../views/404.php';
             exit;
     }
 }
