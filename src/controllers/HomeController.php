@@ -1,11 +1,10 @@
 <?php
+require_once __DIR__ . '/../utils/session_helper.php';
 
 
 class HomeController {
     public function index() {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
+        verificarSessao('id_fornecedor');
 
         if (!isset($_SESSION['usuario'])) {
             header('Location: index.php?page=login');

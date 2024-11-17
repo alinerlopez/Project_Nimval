@@ -151,7 +151,7 @@ if (!isset($_SESSION['usuario'])) {
     <?php include __DIR__ . '/../utils/sidebar_fornecedor.php'; ?>
 
     <div class="content">
-        <h2>Consulta de Clientes</h2>
+        <h2 class="text-center mb-4">Consulta de Clientes</h2>
 
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Buscar cliente por nome, CPF ou email..." onkeyup="filtrarClientes()">

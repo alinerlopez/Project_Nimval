@@ -16,7 +16,6 @@ if (!isset($_SESSION['usuario'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Cliente</title>
     <link href="/Project_Nimval/public/assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/Project_Nimval/public/assets/css/sidebar_fornecedor.css" rel="stylesheet">
     <style>
         body {
             display: flex;
@@ -32,15 +31,12 @@ if (!isset($_SESSION['usuario'])) {
             background-color: #f8f9fa;
         }
 
-        h2 {
-            color: #343a40;
-        }
         .alert {
-            position: fixed; /* Fixa o alerta no topo da tela */
-            top: 20px; /* Distância do topo */
-            left: 50%; /* Centraliza horizontalmente */
-            transform: translateX(-50%); /* Ajusta a posição central */
-            z-index: 1050; /* Garante que fique sobre outros elementos */
+            position: fixed; 
+            top: 20px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            z-index: 1050; 
             padding: 15px 25px;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -67,7 +63,6 @@ if (!isset($_SESSION['usuario'])) {
                     <?php unset($_SESSION['success']); ?>
                 </div>
             <?php endif; ?>
-        <div class="container mt-5">
             <h2 class="text-center mb-4">Cadastro de Cliente</h2>
             <?php if (isset($_SESSION['error'])): ?>
                 <div class="alert alert-danger text-center" id="error-message">
@@ -101,7 +96,6 @@ if (!isset($_SESSION['usuario'])) {
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Cadastrar Cliente</button>
             </form>
-        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

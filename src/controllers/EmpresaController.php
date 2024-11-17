@@ -1,15 +1,12 @@
 <?php
 require_once __DIR__ . '/../models/EmpresaModel.php';  
 require_once __DIR__ . '/../models/UserModel.php';
-require_once __DIR__ . '/../utils/CNPJValidator.php'; 
-
+require_once __DIR__ . '/../utils/CNPJValidator.php';
+require_once __DIR__ . '/../utils/session_helper.php';
 class EmpresaController {
 
     public function cadastrar() {
-
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();  
-        }
+        verificarSessao('id_fornecedor');
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
             $cnpj = trim($_POST['cnpj_fornecedor']);  

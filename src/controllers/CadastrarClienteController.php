@@ -1,12 +1,11 @@
 <?php
 require_once __DIR__ . '/../models/UserModel.php';
 require_once __DIR__ . '/../models/EmailModel.php';
+require_once __DIR__ . '/../utils/session_helper.php';
 
 class CadastrarClienteController {
     public function cadastrarCliente() {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
+        verificarSessao('id_fornecedor');
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nome_cliente = trim($_POST['nome']); 

@@ -1,13 +1,16 @@
 <?php
 require_once __DIR__ . '/../models/ClienteModel.php';
+require_once __DIR__ . '/../utils/session_helper.php';
 
 class ClienteController {
     public function exibirConsultaClientes() {
+        verificarSessao('id_fornecedor');
         $clientes = ClienteModel::getAllClientes();
         include __DIR__ . '/../views/editar_clientes.php';
     }
 
     public function atualizarCliente() {
+        verificarSessao('id_fornecedor');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id_cliente = $_POST['id_cliente'];
             $email = $_POST['email'];

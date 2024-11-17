@@ -4,7 +4,7 @@ require_once __DIR__ . '/../database/Database.php';
 class ClienteModel {
     public static function getAllClientes() {
         $pdo = Database::getConnection();
-        $stmt = $pdo->prepare("SELECT id_cliente, nome, cpf, email, endereco, telefone, ativo FROM clientes");
+        $stmt = $pdo->prepare("SELECT id_cliente, nome, cpf, email, endereco, telefone, ativo FROM clientes ");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
