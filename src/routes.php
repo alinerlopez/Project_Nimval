@@ -98,7 +98,24 @@ function handleRequest($page) {
             case 'acompanhar_pedido':
                 $controller = new PedidoController();
                 $controller->acompanharPedido();
-                break;    
+                break;
+            
+            case 'editar_conta_cliente':
+                $controller = new ClienteController();
+                $controller->editarContaCliente();
+                break;
+            
+            case 'salvar_conta_cliente':
+                $controller = new ClienteController();
+                $controller->salvarContaCliente();
+                break;
+            ;
+            case 'remover_conta_cliente':
+                $controller = new ClienteController();
+                $controller->removerContaCliente();
+                break;
+                   
+                
 
         default:
             header('HTTP/1.1 404 Not Found');

@@ -31,6 +31,7 @@ $fornecedores = PedidoModel::getFornecedoresComPedidos($id_cliente);
         .table th, .table td {
             text-align: left;
             padding: 10px;
+            cursor: pointer;
         }
         .expandable-row {
             display: none;
@@ -42,6 +43,9 @@ $fornecedores = PedidoModel::getFornecedoresComPedidos($id_cliente);
         }
         .btn-primary:hover {
             background-color: var(--azul-escuro);
+        }
+        .fornecedor-row:hover {
+            background-color: var(--cinza-claro2);
         }
     </style>
     <script>
@@ -60,21 +64,15 @@ $fornecedores = PedidoModel::getFornecedoresComPedidos($id_cliente);
                     <thead>
                         <tr>
                             <th>Fornecedor</th>
-                            <th>Ação</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($fornecedores as $fornecedor): ?>
-                            <tr>
+                            <tr class="fornecedor-row" onclick="togglePedidos(<?= $fornecedor['id_fornecedor']; ?>)">
                                 <td><?= htmlspecialchars($fornecedor['nome_fornecedor']); ?></td>
-                                <td>
-                                    <button class="btn btn-primary" onclick="togglePedidos(<?= $fornecedor['id_fornecedor']; ?>)">
-                                        Ver Pedidos
-                                    </button>
-                                </td>
                             </tr>
                             <tr class="expandable-row" id="pedidos-<?= $fornecedor['id_fornecedor']; ?>">
-                                <td colspan="2">
+                                <td>
                                     <table class="table">
                                         <thead>
                                             <tr>
@@ -91,9 +89,9 @@ $fornecedores = PedidoModel::getFornecedoresComPedidos($id_cliente);
                                                     <td><?= htmlspecialchars($pedido['numero_pedido']); ?></td>
                                                     <td><?= htmlspecialchars($pedido['status_pedido']); ?></td>
                                                     <td>
-                                                        <a href="index.php?page=acompanhar_pedido&id_pedido=<?= $pedido['id_pedido']; ?>" class="btn btn-primary">
-                                                            Acompanhar Pedido
-                                                        </a>
+                                                    <a href="index.php?page=acompanhar_pedido&id_pedido=<?= htmlspecialchars($pedido['id_pedido']); ?>" class="link-acompanhar-pedido">
+                                                        Acompanhar Pedido
+                                                    </a>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>

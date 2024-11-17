@@ -19,5 +19,15 @@ class ClienteModel {
         $stmt->bindParam(':id_cliente', $id_cliente);
         return $stmt->execute();
     }
+
+    public static function getClienteById($id_cliente) {
+        $pdo = Database::getConnection();
+        $query = "SELECT nome, cpf, email, endereco, telefone FROM clientes WHERE id_cliente = :id_cliente";
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':id_cliente', $id_cliente, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }     
 }
 ?>

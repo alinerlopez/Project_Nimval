@@ -19,7 +19,7 @@ $nomeUsuario = $_SESSION['nome_usuario'];
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php?page=conta">Conta</a>
+                    <a class="nav-link" href="index.php?page=editar_conta_cliente">Conta</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="index.php?page=meus_pedidos">Meus Pedidos</a>
