@@ -1,13 +1,13 @@
 <?php
+require_once __DIR__ . '/../utils/session_helper.php';
+
 class SenhaController {
     public function criarSenha() {
         include __DIR__ . '/../views/criar_senha.php'; 
     }
 
     public function salvarSenha() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        verificarSessao('id_fornecedor');
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $nome = $_POST['nome'];
@@ -47,6 +47,6 @@ class SenhaController {
                 include __DIR__ . '/../views/criar_senha.php';
             }
         }
-    }    
+    }
 }
 ?>

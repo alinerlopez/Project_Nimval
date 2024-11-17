@@ -79,10 +79,30 @@ function handleRequest($page) {
             $controller = new PedidoController();
             $controller->cadastrarPedido();
             break;
+        
+        case 'atualizar_status_pedido': 
+            $controller = new PedidoController();
+            $controller->atualizarStatusPedido();
+            break;
+
+        case 'salvar_status_pedido':
+            $controller = new PedidoController();
+            $controller->salvarStatusPedido();
+            break;
+
+            case 'meus_pedidos':
+                $controller = new PedidoController();
+                $controller->exibirMeusPedidos();
+                break;
+            
+            case 'acompanhar_pedido':
+                $controller = new PedidoController();
+                $controller->acompanharPedido();
+                break;    
 
         default:
             header('HTTP/1.1 404 Not Found');
-            include __DIR__ . '/../views/404.php';
+            include __DIR__ . '/views/404.php';
             exit;
     }
 }

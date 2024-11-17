@@ -6,17 +6,17 @@
   
   /* cinza */
   
-  --cinza-escuro: #343a40; /* Cinza escuro */
+  --cinza-escuro: #343a40; 
   --cinza-medio2: #495057
   --cinza-medio: #6c757d;
-  --cinza-claro2: #adb5bd; /* Cinza claro para o texto */
+  --cinza-claro2: #adb5bd; 
   --cinza-claro: #e9ecef;
   
   /* branco */
   --gelo: #f8f9fa; /* Cor de fundo clara */
   --borda-clara: #ddd; 
-  --branco: #ffffff; /* Branco */
-
+  --branco: #ffffff; 
+  
   /* Cores de alertas */
   --alerta-sucesso: #28a745; /* Verde para sucesso */
   --alerta-sucesso-hover: #218838; /* Hover do sucesso */
@@ -26,8 +26,6 @@
   --alerta-info-hover: #138496; /* Hover de info */
   --alerta-warning: #ffc107; /* Amarelo para warning */
   --alerta-warning-hover: #e0a800; /* Hover de warning */
-
-  /* preto */
 
   --preto:  #000;
   

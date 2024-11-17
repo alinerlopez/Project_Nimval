@@ -1,7 +1,6 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+require_once __DIR__ . '/../utils/session_helper.php';
+verificarSessao('id_fornecedor');
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: index.php?page=login");

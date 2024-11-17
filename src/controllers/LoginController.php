@@ -1,11 +1,11 @@
 <?php
 require_once __DIR__ . '/../models/LoginModel.php';
+require_once __DIR__ . '/../utils/session_helper.php';
+
 
 class LoginController {
     public function login() {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
+        verificarSessao('id_fornecedor');
 
         if (isset($_SESSION['usuario'])) {
           
@@ -63,14 +63,12 @@ class LoginController {
             include __DIR__ . '/../views/login.php';
         }
     }
-    
     public function logout() {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
+        verificarSessao('id_fornecedor');
+
         session_unset();
         session_destroy();
-        header('Location: index.php?page=login');
+        header("Location: index.php?page=selecionar_perfil");
         exit();
     }
 }

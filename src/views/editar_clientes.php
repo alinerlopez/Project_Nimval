@@ -1,7 +1,7 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+require_once __DIR__ . '/../utils/session_helper.php';
+verificarSessao('id_fornecedor');
+
 
 if (!isset($_SESSION['usuario'])) {
     header("Location: index.php?page=login");
@@ -151,7 +151,7 @@ if (!isset($_SESSION['usuario'])) {
     <?php include __DIR__ . '/../utils/sidebar_fornecedor.php'; ?>
 
     <div class="content">
-        <h2>Consulta de Clientes</h2>
+        <h2 class="text-center mb-4">Consulta de Clientes</h2>
 
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Buscar cliente por nome, CPF ou email..." onkeyup="filtrarClientes()">

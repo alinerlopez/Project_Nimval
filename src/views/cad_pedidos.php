@@ -1,9 +1,8 @@
 <?php
 require_once __DIR__ . '/../models/UserModel.php';
+require_once __DIR__ . '/../utils/session_helper.php';
+verificarSessao('id_fornecedor');
 
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
 
 if (isset($_POST['cpf'])) {
     $cpf = $_POST['cpf'];
@@ -24,7 +23,6 @@ if (isset($_POST['cpf'])) {
     <meta charset="UTF-8">
     <title>Cadastro de Pedido</title>
     <link href="/Project_Nimval/public/assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/Project_Nimval/public/assets/css/sidebar_fornecedor.css" rel="stylesheet">
     <style>
         body {
             display: flex;
@@ -228,16 +226,16 @@ if (isset($_POST['cpf'])) {
         box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
     }
     .alert {
-    position: fixed; /* Fixa o alerta no topo da tela */
-    top: 20px; /* Distância do topo */
-    left: 50%; /* Centraliza horizontalmente */
-    transform: translateX(-50%); /* Ajusta a posição central */
-    z-index: 1050; /* Garante que fique sobre outros elementos */
+    position: fixed; 
+    top: 20px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    z-index: 1050; 
     padding: 15px 25px;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     animation: fadeIn 0.5s ease-out;
-    width: 90%; /* Ajuste conforme necessário */
+    width: 90%; 
     max-width: 400px;
     text-align: center;
 }
@@ -260,8 +258,7 @@ if (isset($_POST['cpf'])) {
             <?php unset($_SESSION['success']); ?>
         </div>
     <?php endif; ?>
-    <div class="container mt-5">
-        <h2>Cadastro de Pedido</h2>
+    <h2 class="text-center mb-4">Cadastro de Pedido</h2>
         
         <div class="search-container">
             <input type="text" id="cpf" placeholder="Digite o CPF do cliente" maxlength="14">
@@ -274,7 +271,6 @@ if (isset($_POST['cpf'])) {
             <p><strong>CPF:</strong> <span id="clientCpf"></span></p>
             <p><strong>Email:</strong> <span id="clientEmail"></span></p>
             <button class="btn" onclick="openPedidoForm()">Cadastrar Pedido</button>
-        </div>
         </div>
     </div>
 
