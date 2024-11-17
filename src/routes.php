@@ -90,9 +90,19 @@ function handleRequest($page) {
             $controller->salvarStatusPedido();
             break;
 
+            case 'meus_pedidos':
+                $controller = new PedidoController();
+                $controller->exibirMeusPedidos();
+                break;
+            
+            case 'acompanhar_pedido':
+                $controller = new PedidoController();
+                $controller->acompanharPedido();
+                break;    
+
         default:
             header('HTTP/1.1 404 Not Found');
-            include __DIR__ . '/../views/404.php';
+            include __DIR__ . '/views/404.php';
             exit;
     }
 }

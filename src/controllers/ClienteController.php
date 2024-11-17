@@ -28,5 +28,51 @@ class ClienteController {
             exit;
         }
     }
+    
+    public function listarFornecedores() {
+        verificarSessao('usuario');
+
+        $id_cliente = $_SESSION['usuario'];
+        $fornecedores = PedidoModel::getFornecedoresByCliente($id_cliente);
+
+        include __DIR__ . '/../views/meus_pedidos.php';
+    }
+
+    public function listarPedidosFornecedor() {
+        verificarSessao('usuario');
+
+        if (!isset($_GET['id_fornecedor'])) {
+            $_SESSION['error'] = "Fornecedor não especificado.";
+            header('Location: index.php?page=meus_pedidos');
+            exit();
+        }
+
+        $id_fornecedor = $_GET['id_fornecedor'];
+        $id_cliente = $_SESSION['usuario'];
+        $pedidos = PedidoModel::getPedidosByFornecedorAndCliente($id_fornecedor, $id_cliente);
+
+        include __DIR__ . '/../views/pedidos_fornecedor.php';
+    }
+
+    public function acompanharPedido() {
+        verificarSessao('usuario');
+
+        if (!isset($_GET['id_pedido'])) {
+            $_SESSION['error'] = "Pedido não especificado.";
+            header('Location: index.php?page=meus_pedidos');
+            exit();
+        }
+
+        $id_pedido = $_GET['id_pedido'];
+        $pedido = PedidoModel::getPedidoById($id_pedido);
+
+        if (!$pedido) {
+            $_SESSION['error'] = "Pedido não encontrado.";
+            header('Location: index.php?page=meus_pedidos');
+            exit();
+        }
+
+        include __DIR__ . '/../views/acompanhar_pedido.php';
+    }
 }
 ?>

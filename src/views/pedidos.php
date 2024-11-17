@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/../utils/session_helper.php';
+verificarSessao('id_fornecedor');
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -60,35 +64,25 @@
         }
 
         .btn {
-        padding: 8px 16px;
-        border: 2px solid #007bff; 
-        border-radius: 5px;
-        background-color: #007bff;
-        color: white;
-        cursor: pointer;
-        transition: background-color 0.3s ease, border-color 0.3s ease;
-    }
+            padding: 8px 16px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
 
-    .btn {
-        padding: 8px 16px;
-        border: 2px solid #007bff;
-        border-radius: 5px;
-        background-color: #007bff;
-        color: white;
-        cursor: pointer;
-        transition: background-color 0.3s ease, border-color 0.3s ease;
-    }
+        .btn:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
 
-    .btn:hover {
-        background-color: #0056b3;
-        border-color: #0056b3;
-    }
-
-    .btn:focus {
-        outline: none;
-        border-color: #80bdff;
-        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-    }
+        .btn:focus {
+            outline: none;
+            border-color: #80bdff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
 
         @media (max-width: 768px) {
             .grid-table th, .grid-table td {

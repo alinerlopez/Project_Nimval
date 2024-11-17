@@ -1,9 +1,8 @@
 <?php
 require_once __DIR__ . '/../models/UserModel.php';
+require_once __DIR__ . '/../utils/session_helper.php';
+verificarSessao('id_fornecedor');
 
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
 
 if (isset($_POST['cpf'])) {
     $cpf = $_POST['cpf'];

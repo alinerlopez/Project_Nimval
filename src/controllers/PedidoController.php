@@ -102,6 +102,29 @@ class PedidoController {
             header('Location: index.php?page=pedidos');
             exit();
         }
-    }    
+    }
+
+    public function exibirMeusPedidos() {
+        verificarSessao('id_cliente');
+    
+        $id_cliente = $_SESSION['usuario'];
+        try {
+            $fornecedores = PedidoModel::getFornecedoresComPedidos($id_cliente);
+        } catch (Exception $e) {
+            $_SESSION['error'] = "Erro ao carregar fornecedores: " . $e->getMessage();
+            header('Location: index.php?page=home');
+            exit();
+        }
+    
+        include __DIR__ . '/../views/meus_pedidos.php';
+    }
+    
+    public function getFornecedoresComPedidos($id_cliente) {
+        return PedidoModel::getFornecedoresComPedidos($id_cliente);
+    }
+    
+    public function getPedidosPorFornecedor($id_fornecedor, $id_cliente) {
+        return PedidoModel::getPedidosPorFornecedor($id_fornecedor, $id_cliente);
+    }
 }
 ?>

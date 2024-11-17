@@ -63,5 +63,13 @@ class LoginController {
             include __DIR__ . '/../views/login.php';
         }
     }
+    public function logout() {
+        verificarSessao('id_fornecedor');
+
+        session_unset();
+        session_destroy();
+        header("Location: index.php?page=selecionar_perfil");
+        exit();
+    }
 }
 ?>
