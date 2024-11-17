@@ -85,21 +85,24 @@
                 <i class="fas fa-home"></i> <span>Home</span>
             </a>
         </li>
-        <?php if ($_SESSION['nivel_acesso'] == 'admin'): ?>
+       <!--
+<?php if ($_SESSION['nivel_acesso'] == 'admin'): ?>
+    <li class="nav-item">
+        <a href="#funcionariosSubMenu" class="nav-link" data-bs-toggle="collapse">
+            <i class="fas fa-user-tie"></i> <span>Funcionários</span>
+        </a>
+        <ul class="collapse" id="funcionariosSubMenu">
             <li class="nav-item">
-                <a href="#funcionariosSubMenu" class="nav-link" data-bs-toggle="collapse">
-                    <i class="fas fa-user-tie"></i> <span>Funcionários</span>
-                </a>
-                <ul class="collapse" id="funcionariosSubMenu">
-                    <li class="nav-item">
-                        <a href="index.php?page=cadastrar_funcionario" class="nav-link"><i class="fas fa-user-plus"></i> Cadastrar Funcionário</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link"><i class="fas fa-search"></i> Consultar Funcionários</a>
-                    </li>
-                </ul>
+                <a href="index.php?page=cadastrar_funcionario" class="nav-link"><i class="fas fa-user-plus"></i> Cadastrar Funcionário</a>
             </li>
-        <?php endif; ?>
+            <li class="nav-item">
+                <a href="#" class="nav-link"><i class="fas fa-search"></i> Consultar Funcionários</a>
+            </li>
+        </ul>
+    </li>
+<?php endif; ?>
+-->
+
 
         <li class="nav-item">
             <a href="#clientesSubMenu" class="nav-link" data-bs-toggle="collapse">
