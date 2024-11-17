@@ -51,14 +51,7 @@ class PedidoController {
     }
 
     public function exibirPedidos() {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-    
-        if (!isset($_SESSION['id_fornecedor'])) {
-            header('Location: index.php?page=login');
-            exit();
-        }
+        verificarSessao('id_fornecedor');
     
         $id_fornecedor = $_SESSION['id_fornecedor'];
         $pedidos = PedidoModel::getPedidosByFornecedor($id_fornecedor);
@@ -66,36 +59,49 @@ class PedidoController {
         include __DIR__ . '/../views/pedidos.php';
     }
     
-    public function atualizarPedidos() {
+    public function atualizarStatusPedido() {
         verificarSessao('id_fornecedor');
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['status'])) {
-            $statusAtualizado = $_POST['status']; 
-
-            if (empty($statusAtualizado)) {
-                $_SESSION['error'] = "Nenhum pedido para atualizar.";
-                header('Location: index.php?page=pedidos');
-                exit();
-            }
-
-            foreach ($statusAtualizado as $id_pedido => $novo_status) {
-                try {
-                    PedidoModel::atualizarStatus($id_pedido, $novo_status);
-                } catch (Exception $e) {
-                    $_SESSION['error'] = "Erro ao atualizar o pedido $id_pedido: " . $e->getMessage();
-                    header('Location: index.php?page=pedidos');
-                    exit();
-                }
-            }
-
-            $_SESSION['success'] = "Status dos pedidos atualizado com sucesso!";
-            header('Location: index.php?page=pedidos');
-            exit();
-        } else {
-            $_SESSION['error'] = "Nenhuma ação foi realizada.";
+        
+        if (!isset($_GET['id_pedido'])) {
+            $_SESSION['error'] = "Nenhum pedido selecionado para atualização.";
             header('Location: index.php?page=pedidos');
             exit();
         }
+    
+        $id_pedido = $_GET['id_pedido'];
+    
+        try {
+            $pedido = PedidoModel::getPedidoById($id_pedido); 
+            if (!$pedido) {
+                $_SESSION['error'] = "Pedido não encontrado.";
+                header('Location: index.php?page=pedidos');
+                exit();
+            }
+        } catch (Exception $e) {
+            $_SESSION['error'] = "Erro ao carregar o pedido: " . $e->getMessage();
+            header('Location: index.php?page=pedidos');
+            exit();
+        }
+        include __DIR__ . '/../views/status_pedido.php';
     }
+    
+
+    public function salvarStatusPedido() {
+        verificarSessao('id_fornecedor');
+    
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id_pedido = $_POST['id_pedido'];
+            $descricao_status = $_POST['descricao_status'];
+    
+            try {
+                PedidoModel::atualizarStatus($id_pedido, $descricao_status);
+                $_SESSION['success'] = "Status atualizado com sucesso!";
+            } catch (Exception $e) {
+                $_SESSION['error'] = "Erro ao atualizar status: " . $e->getMessage();
+            }
+            header('Location: index.php?page=pedidos');
+            exit();
+        }
+    }    
 }
 ?>

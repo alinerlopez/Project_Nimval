@@ -79,6 +79,16 @@ function handleRequest($page) {
             $controller = new PedidoController();
             $controller->cadastrarPedido();
             break;
+        
+        case 'atualizar_status_pedido': 
+            $controller = new PedidoController();
+            $controller->atualizarStatusPedido();
+            break;
+
+        case 'salvar_status_pedido':
+            $controller = new PedidoController();
+            $controller->salvarStatusPedido();
+            break;
 
         default:
             header('HTTP/1.1 404 Not Found');

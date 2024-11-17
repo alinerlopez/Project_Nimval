@@ -60,17 +60,35 @@
         }
 
         .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-        }
+        padding: 8px 16px;
+        border: 2px solid #007bff; 
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
 
-        .btn:hover {
-            background-color: #0056b3;
-        }
+    .btn {
+        padding: 8px 16px;
+        border: 2px solid #007bff;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+    .btn:focus {
+        outline: none;
+        border-color: #80bdff;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    }
 
         @media (max-width: 768px) {
             .grid-table th, .grid-table td {
@@ -83,6 +101,7 @@
 <body>
     <?php include __DIR__ . '/../utils/sidebar_fornecedor.php'; ?>
 
+    <?php if (!empty($pedidos)): ?>
     <div class="content">
         <h2 class="text-center mb-4">Pedidos</h2>
 
@@ -90,38 +109,34 @@
             <input type="text" id="searchInput" placeholder="Buscar pedido por número, descrição ou status..." onkeyup="filtrarPedidos()">
         </div>
 
-        <?php if (!empty($pedidos)): ?>
-            <form action="index.php?page=atualizar_pedidos" method="post">
-                <table class="grid-table" id="pedidosTable">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nº Pedido</th>
-                            <th>Descrição</th>
-                            <th>Status</th>
-                            <th>Data</th>
-                            <th>Ação</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($pedidos as $pedido): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($pedido['id_pedido']); ?></td>
-                                <td><?= htmlspecialchars($pedido['numero_pedido']); ?></td>
-                                <td><?= htmlspecialchars($pedido['descricao_pedido']); ?></td>
-                                <td><?= htmlspecialchars($pedido['status_pedido']); ?></td>
-                                <td><?= htmlspecialchars($pedido['data_pedido']); ?></td>
-                                <td>
-                                    <button type="submit" name="atualizar" value="<?= htmlspecialchars($pedido['id_pedido']); ?>" class="btn">Atualizar</button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </form>
-        <?php else: ?>
-            <p>Nenhum pedido encontrado.</p>
-        <?php endif; ?>
+        <table class="grid-table" id="pedidosTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nº Pedido</th>
+                    <th>Descrição</th>
+                    <th>Status</th>
+                    <th>Data</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($pedidos as $pedido): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($pedido['id_pedido']); ?></td>
+                        <td><?= htmlspecialchars($pedido['numero_pedido']); ?></td>
+                        <td><?= htmlspecialchars($pedido['descricao_pedido']); ?></td>
+                        <td><?= htmlspecialchars($pedido['status_pedido']); ?></td>
+                        <td><?= htmlspecialchars($pedido['data_pedido']); ?></td>
+                        <td>
+                            <a href="index.php?page=atualizar_status_pedido&id_pedido=<?= htmlspecialchars($pedido['id_pedido']); ?>" class="btn btn-primary">
+                                Atualizar
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
 
     <script>
@@ -142,6 +157,9 @@
             });
         }
     </script>
+<?php else: ?>
+    <p>Nenhum pedido encontrado.</p>
+<?php endif; ?>
     <script src="/Project_Nimval/public/assets/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -68,20 +68,44 @@ class PedidoModel {
     }
     
     
-    public static function atualizarStatus($id_pedido, $novo_status) {
+    public static function atualizarStatus($id_pedido, $descricao_status) {
         $pdo = Database::getConnection();
-    
-        $query = "UPDATE pedido SET status_pedido = :status WHERE id_pedido = :id";
+        $query = "UPDATE status_pedidos 
+                  SET descricao_status = :descricao_status, data_status = NOW() 
+                  WHERE id_pedido = :id_pedido";
+        
         $stmt = $pdo->prepare($query);
-    
-        $stmt->bindParam(':status', $novo_status, PDO::PARAM_STR);
-        $stmt->bindParam(':id', $id_pedido, PDO::PARAM_INT);
-    
+        $stmt->bindParam(':descricao_status', $descricao_status, PDO::PARAM_STR);
+        $stmt->bindParam(':id_pedido', $id_pedido, PDO::PARAM_INT);
+        
         if (!$stmt->execute()) {
+            error_log("Erro ao atualizar status: " . implode(", ", $stmt->errorInfo()));
             throw new Exception("Erro ao atualizar o status do pedido.");
         }
-    
-        return true;
     }
+
+    public static function getPedidoById($id_pedido) {
+    $pdo = Database::getConnection();
+    $query = "
+        SELECT 
+            p.*, 
+            sp.descricao_status AS status_pedido 
+        FROM 
+            pedido p
+        LEFT JOIN 
+            status_pedidos sp ON p.id_pedido = sp.id_pedido
+        WHERE 
+            p.id_pedido = :id_pedido
+    ";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':id_pedido', $id_pedido, PDO::PARAM_INT);
+    
+    if ($stmt->execute()) {
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } else {
+        error_log("Erro ao buscar pedido: " . implode(", ", $stmt->errorInfo()));
+        return false;
+    }
+}
 }
 ?>
