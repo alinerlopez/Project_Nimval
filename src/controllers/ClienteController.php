@@ -74,5 +74,73 @@ class ClienteController {
 
         include __DIR__ . '/../views/acompanhar_pedido.php';
     }
+
+    public function editarContaCliente() {
+        verificarSessao('id_cliente');
+    
+        $id_cliente = $_SESSION['usuario'];
+        try {
+            $cliente = ClienteModel::getClienteById($id_cliente);
+    
+            if (!$cliente) {
+                $_SESSION['error'] = "Cliente não encontrado.";
+                header('Location: index.php?page=home');
+                exit();
+            }
+    
+            include __DIR__ . '/../views/editar_conta_cliente.php';
+        } catch (Exception $e) {
+            $_SESSION['error'] = "Erro ao carregar os dados: " . $e->getMessage();
+            header('Location: index.php?page=home');
+            exit();
+        }
+    }
+    public function salvarContaCliente() {
+        verificarSessao('id_cliente');
+    
+        $id_cliente = $_SESSION['usuario'];
+        $email = $_POST['email'];
+        $endereco = $_POST['endereco'];
+        $telefone = $_POST['telefone'];
+        $ativo = $_POST['ativo'];
+    
+        try {
+            if (ClienteModel::atualizarCliente($id_cliente, $email, $endereco, $telefone, $ativo)) {
+                $_SESSION['success'] = "Dados atualizados com sucesso.";
+            } else {
+                $_SESSION['error'] = "Erro ao atualizar os dados.";
+            }
+        } catch (Exception $e) {
+            $_SESSION['error'] = "Erro ao atualizar os dados: " . $e->getMessage();
+        }
+    
+        header('Location: index.php?page=editar_conta_cliente');
+        exit();
+    }
+    
+    public function removerContaCliente() {
+        verificarSessao('id_cliente');
+    
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id_cliente = $_POST['id_cliente'];
+    
+            try {
+                $resultado = ClienteModel::atualizarCliente($id_cliente, null, null, null, 0);
+                if ($resultado) {
+                    $_SESSION['success'] = "Conta removida com sucesso!";
+                    header('Location: index.php?page=logout'); 
+                    exit();
+                } else {
+                    $_SESSION['error'] = "Erro ao remover conta.";
+                }
+            } catch (Exception $e) {
+                $_SESSION['error'] = "Erro: " . $e->getMessage();
+            }
+        }
+    
+        header('Location: index.php?page=editar_conta_cliente');
+        exit();
+    }
+    
 }
 ?>

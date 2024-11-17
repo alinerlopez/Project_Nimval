@@ -270,7 +270,7 @@ if (isset($_POST['cpf'])) {
             <h3 id="clientName"></h3>
             <p><strong>CPF:</strong> <span id="clientCpf"></span></p>
             <p><strong>Email:</strong> <span id="clientEmail"></span></p>
-            <button class="btn" onclick="openPedidoForm()">Cadastrar Pedido</button>
+            <a href="javascript:void(0);" class="btn" onclick="openPedidoForm()">Cadastrar Pedido</a>
         </div>
     </div>
 

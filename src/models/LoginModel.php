@@ -21,22 +21,23 @@ class LoginModel {
             error_log('Erro ao conectar com o banco de dados.');
             return false;
         }
-
+    
         try {
             $stmt = $pdo->prepare("
-                SELECT id_cliente AS id, nome, email, senha 
+                SELECT id_cliente AS id, nome, email, senha, ativo 
                 FROM clientes 
                 WHERE email = :email
             ");
             $stmt->bindParam(':email', $email);
             $stmt->execute();
-
+    
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             self::logDatabaseError('cliente', $e);
             return false;
         }
     }
+    
 
     public static function findFornecedorByEmail($email) {
         $pdo = Database::getConnection();

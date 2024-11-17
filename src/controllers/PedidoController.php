@@ -106,25 +106,47 @@ class PedidoController {
 
     public function exibirMeusPedidos() {
         verificarSessao('id_cliente');
-    
-        $id_cliente = $_SESSION['usuario'];
+        
         try {
+            $id_cliente = $_SESSION['usuario'];
             $fornecedores = PedidoModel::getFornecedoresComPedidos($id_cliente);
+            include __DIR__ . '/../views/meus_pedidos.php';
         } catch (Exception $e) {
             $_SESSION['error'] = "Erro ao carregar fornecedores: " . $e->getMessage();
             header('Location: index.php?page=home');
             exit();
         }
+    }
+
+    public function acompanharPedido() {
+        verificarSessao('id_cliente');
+        
+        if (!isset($_GET['id_pedido']) || empty($_GET['id_pedido'])) {
+            $_SESSION['error'] = "Pedido não encontrado.";
+            header('Location: index.php?page=meus_pedidos');
+            exit();
+        }
     
-        include __DIR__ . '/../views/meus_pedidos.php';
+        $id_pedido = intval($_GET['id_pedido']);
+        try {
+            $pedido = PedidoModel::getPedidoById($id_pedido);
+            if (!$pedido) {
+                $_SESSION['error'] = "Pedido não encontrado.";
+                header('Location: index.php?page=meus_pedidos');
+                exit();
+            }
+    
+            $historico_status = PedidoModel::getHistoricoStatus($id_pedido);
+    
+            include __DIR__ . '/../views/acompanhar_pedido.php';
+        } catch (Exception $e) {
+            $_SESSION['error'] = "Erro ao carregar informações do pedido: " . $e->getMessage();
+            header('Location: index.php?page=meus_pedidos');
+            exit();
+        }
     }
     
-    public function getFornecedoresComPedidos($id_cliente) {
-        return PedidoModel::getFornecedoresComPedidos($id_cliente);
-    }
     
-    public function getPedidosPorFornecedor($id_fornecedor, $id_cliente) {
-        return PedidoModel::getPedidosPorFornecedor($id_fornecedor, $id_cliente);
-    }
+        
 }
 ?>

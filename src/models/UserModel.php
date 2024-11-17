@@ -6,9 +6,21 @@ class UserModel {
 
     public static function createClient($nome, $email, $cpf, $telefone) {
         $pdo = Database::getConnection();
-        if (self::findClientByCPF($cpf)) {
-            throw new Exception("Cliente já cadastrado com este CPF.");
+        
+        $existingClientByCPF = self::findClientByCPF($cpf);
+        if ($existingClientByCPF) {
+            if ($existingClientByCPF['ativo'] == 1) {
+                throw new Exception("Cliente com este CPF já está ativo.");
+            }
         }
+
+     
+        $existingClientByEmail = self::findClientByEmail($email);
+        if ($existingClientByEmail) {
+            if ($existingClientByEmail['ativo'] == 1) {
+                throw new Exception("Cliente com este e-mail já está ativo.");
+            }
+         }
 
         $senha = bin2hex(random_bytes(4)); 
         $senha_hash = password_hash($senha, PASSWORD_BCRYPT); 
@@ -42,6 +54,7 @@ class UserModel {
             return false;
         }
     }
+
 
     public static function createUser($nome, $email, $senha_hash, $nivel_acesso, $fornecedor_id, $cpf, $telefone) {
         $pdo = Database::getConnection();  
@@ -91,7 +104,7 @@ class UserModel {
     public static function findClientByEmail($email) {
         $pdo = Database::getConnection();
         try {
-            $stmt = $pdo->prepare("SELECT id_cliente, nome, email
+            $stmt = $pdo->prepare("SELECT id_cliente, nome, email, ativo
                                    FROM clientes WHERE email = :email");
             $stmt->bindParam(':email', $email);
             $stmt->execute();
@@ -105,7 +118,7 @@ class UserModel {
     public static function findClientByCPF($cpf) {
         $pdo = Database::getConnection();
         try {
-            $stmt = $pdo->prepare("SELECT id_cliente, nome, email, cpf 
+            $stmt = $pdo->prepare("SELECT id_cliente, nome, email, cpf, ativo 
                                    FROM clientes WHERE cpf = :cpf");
             $stmt->bindParam(':cpf', $cpf);
             $stmt->execute();
