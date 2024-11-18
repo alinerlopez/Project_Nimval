@@ -54,6 +54,20 @@ verificarSessao('id_fornecedor');
         .btn-success:hover {
             background-color: #218838;
         }
+
+        .btn-finalizar {
+            background-color: #dc3545;
+            border: none;
+        }
+
+        .btn-finalizar:hover {
+            background-color: #c82333;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
     </style>
 </head>
 <body>
@@ -62,7 +76,7 @@ verificarSessao('id_fornecedor');
 <div class="content">
     <div class="card">
         <h2>Atualizar Status do Pedido</h2>
-        <form action="index.php?page=salvar_status_pedido" method="post">
+        <form id="statusForm" action="index.php?page=salvar_status_pedido" method="post">
             <input type="hidden" name="id_pedido" value="<?= htmlspecialchars($pedido['id_pedido']); ?>">
 
             <div class="form-group">
@@ -80,11 +94,24 @@ verificarSessao('id_fornecedor');
                 <textarea id="descricao_status" name="descricao_status" class="form-control" rows="4" required></textarea>
             </div>
 
-            <button type="submit" class="btn btn-success w-100">Salvar</button>
+            <div class="btn-group">
+                <button type="submit" class="btn btn-success w-50">Atualizar Status</button>
+                <button type="button" class="btn btn-finalizar w-50" id="finalizarPedido">Finalizar</button>
+            </div>
         </form>
     </div>
 </div>
 
 <script src="/Project_Nimval/public/assets/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.getElementById('finalizarPedido').addEventListener('click', function () {
+        if (confirm('Tem certeza que deseja finalizar este pedido?')) {
+        
+            document.getElementById('descricao_status').value = 'Finalizado';
+            document.getElementById('statusForm').submit();
+            document.querySelectorAll('button').forEach(button => button.disabled = true);
+        }
+    });
+</script>
 </body>
 </html>

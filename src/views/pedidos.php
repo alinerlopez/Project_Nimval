@@ -78,10 +78,10 @@ verificarSessao('id_fornecedor');
             border-color: #0056b3;
         }
 
-        .btn:focus {
-            outline: none;
-            border-color: #80bdff;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        .btn:disabled {
+            background-color: #e0e0e0;
+            border-color: #e0e0e0;
+            cursor: not-allowed;
         }
 
         @media (max-width: 768px) {
@@ -123,7 +123,9 @@ verificarSessao('id_fornecedor');
                         <td><?= htmlspecialchars($pedido['status_pedido']); ?></td>
                         <td><?= htmlspecialchars($pedido['data_pedido']); ?></td>
                         <td>
-                            <a href="index.php?page=atualizar_status_pedido&id_pedido=<?= htmlspecialchars($pedido['id_pedido']); ?>" class="btn btn-primary">
+                            <a 
+                                href="<?= strtolower($pedido['status_pedido']) !== 'finalizado' ? "index.php?page=atualizar_status_pedido&id_pedido=" . htmlspecialchars($pedido['id_pedido']) : '#'; ?>"
+                                class="btn btn-primary <?= strtolower($pedido['status_pedido']) === 'finalizado' ? 'disabled' : ''; ?>">
                                 Atualizar
                             </a>
                         </td>
@@ -143,11 +145,7 @@ verificarSessao('id_fornecedor');
                 const descricao = row.cells[2].textContent.toLowerCase();
                 const status = row.cells[3].textContent.toLowerCase();
 
-                if (descricao.includes(searchInput) || status.includes(searchInput) || numero.includes(searchInput)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
+                row.style.display = (descricao.includes(searchInput) || status.includes(searchInput) || numero.includes(searchInput)) ? '' : 'none';
             });
         }
     </script>
