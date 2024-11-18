@@ -75,9 +75,6 @@
 
     <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
         <h4 class="mb-0">Nimval</h4>
-        <button class="sidebar-toggler" id="toggleSidebar">
-            <i class="fas fa-bars"></i>
-        </button>
     </div>
     <ul class="nav flex-column">
         <li class="nav-item">
