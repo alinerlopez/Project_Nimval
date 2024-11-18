@@ -24,6 +24,10 @@ class EmpresaModel {
         return self::findFornecedorByField('email_fornecedor', $email);
     }
 
+    public static function getFornecedorById($id_fornecedor) {
+        return self::findFornecedorByField('id_fornecedor', $id_fornecedor);
+    }
+
     public static function createFornecedor($nome_fornecedor, $cnpj, $telefone, $email) {
         $db = Database::getConnection();  
         try {
@@ -41,5 +45,60 @@ class EmpresaModel {
             return false;
         }
     }
+
+    public static function atualizarFornecedor($id_fornecedor, $telefone, $email) {
+        $db = Database::getConnection();
+    
+        try {
+            $stmt = $db->prepare("
+                UPDATE fornecedor
+                SET 
+                    tel_fornecedor = :telefone,
+                    email_fornecedor = :email
+                WHERE 
+                    id_fornecedor = :id_fornecedor
+            ");
+    
+            $stmt->bindParam(':telefone', $telefone);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':id_fornecedor', $id_fornecedor);
+    
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Erro ao atualizar fornecedor: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public static function removerFornecedor($id_fornecedor) {
+        $pdo = Database::getConnection();
+        
+        try {
+            $pdo->beginTransaction();
+    
+            $stmtFuncionarios = $pdo->prepare("DELETE FROM funcionarios WHERE id_fornecedor = :id_fornecedor");
+            $stmtFuncionarios->bindParam(':id_fornecedor', $id_fornecedor, PDO::PARAM_INT);
+            $stmtFuncionarios->execute();
+    
+            $stmtFornecedor = $pdo->prepare("
+                UPDATE fornecedor
+                SET 
+                    cnpj_fornecedor = NULL,
+                    email_fornecedor = NULL
+                WHERE 
+                    id_fornecedor = :id_fornecedor
+            ");
+            $stmtFornecedor->bindParam(':id_fornecedor', $id_fornecedor, PDO::PARAM_INT);
+            $stmtFornecedor->execute();
+    
+            $pdo->commit();
+    
+            return true;
+        } catch (PDOException $e) {
+            $pdo->rollBack();
+            error_log("Erro ao remover fornecedor: " . $e->getMessage());
+            return false;
+        }
+    }    
 }
 ?>

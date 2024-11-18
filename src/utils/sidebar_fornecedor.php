@@ -85,25 +85,13 @@
                 <i class="fas fa-home"></i> <span>Home</span>
             </a>
         </li>
-       <!--
-<?php if ($_SESSION['nivel_acesso'] == 'admin'): ?>
-    <li class="nav-item">
-        <a href="#funcionariosSubMenu" class="nav-link" data-bs-toggle="collapse">
-            <i class="fas fa-user-tie"></i> <span>Funcionários</span>
-        </a>
-        <ul class="collapse" id="funcionariosSubMenu">
+        <?php if ($_SESSION['nivel_acesso'] == 'admin'): ?>
             <li class="nav-item">
-                <a href="index.php?page=cadastrar_funcionario" class="nav-link"><i class="fas fa-user-plus"></i> Cadastrar Funcionário</a>
+                <a href="index.php?page=funcionarios" class="nav-link">
+                    <i class="fas fa-user-tie"></i> <span>Funcionários</span>
+                </a>
             </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link"><i class="fas fa-search"></i> Consultar Funcionários</a>
-            </li>
-        </ul>
-    </li>
-<?php endif; ?>
--->
-
-
+        <?php endif; ?>
         <li class="nav-item">
             <a href="#clientesSubMenu" class="nav-link" data-bs-toggle="collapse">
                 <i class="fas fa-users"></i> <span>Clientes</span>
@@ -130,11 +118,11 @@
                 </li>
             </ul>
         </li>
-        <li class="nav-item">
-            <a href="#" class="nav-link">
-                <i class="fas fa-cog"></i> <span>Configurações de Conta</span>
-            </a>
-        </li>
+            <li class="nav-item">
+                <a href="index.php?page=configuracoes_conta" class="nav-link">
+                    <i class="fas fa-cog"></i> <span>Configurações de Conta</span>
+                </a>
+            </li>
         <li class="nav-item">
             <a href="index.php?page=logout" onclick="return confirm('Você realmente deseja sair?');" class="nav-link btn btn-danger">
                 <i class="fas fa-sign-out-alt"></i> <span>Logout</span>

@@ -49,14 +49,31 @@ class LoginModel {
     
         try {
             $stmt = $pdo->prepare("
-                SELECT id_usuario AS id, nome, email, senha, nivel_acesso, email_validado, id_fornecedor
-                FROM funcionarios 
-                WHERE email = :email
+                SELECT 
+                f.id_usuario AS id, 
+                f.nome, 
+                f.email, 
+                f.senha, 
+                f.nivel_acesso, 
+                f.email_validado, 
+                f.id_fornecedor,
+                fr.cnpj_fornecedor 
+            FROM 
+                funcionarios f
+            LEFT JOIN 
+                fornecedor fr ON f.id_fornecedor = fr.id_fornecedor
+            WHERE 
+                f.email = :email
             ");
             $stmt->bindParam(':email', $email);
             $stmt->execute();
-    
+
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($result) {
+                if (is_null($result['cnpj_fornecedor'])) {
+                    return false;
+                }
+            }
     
             if ($result) {
                 if (!isset($result['nivel_acesso']) || is_null($result['nivel_acesso'])) {
