@@ -121,6 +121,7 @@ function emailSenhaLayout($nome, $senha_gerada, $linkLogin) {
                 <p>Você pode acessar o sistema através do seguinte link:</p>
                 <a href='$linkLogin'>Acessar Sistema</a>
                 <p>Se você não fez este cadastro, ignore este e-mail.</p>
+                <p>Seus dados ficaram visíveis para todos os fornecedores cadastrados em nossa plataforma</p>
             </div>
             <div class='footer'>
                 © 2024 Nimval Rastreamentos. Todos os direitos reservados.

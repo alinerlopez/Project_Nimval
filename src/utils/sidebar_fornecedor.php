@@ -115,11 +115,13 @@
                 </li>
             </ul>
         </li>
+        <?php if ($_SESSION['nivel_acesso'] == 'admin'): ?>
             <li class="nav-item">
                 <a href="index.php?page=configuracoes_conta" class="nav-link">
                     <i class="fas fa-cog"></i> <span>Configurações de Conta</span>
                 </a>
             </li>
+            <?php endif; ?>
         <li class="nav-item">
             <a href="index.php?page=logout" onclick="return confirm('Você realmente deseja sair?');" class="nav-link btn btn-danger">
                 <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
