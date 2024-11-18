@@ -23,7 +23,7 @@ function emailConfirmacao($nome, $linkConfirmacao) {
                     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
                 }
                 .email-button {
-                    background-color: #007bff;
+                    background-color: #ffffff;
                     color: #ffffff;
                     padding: 10px 20px;
                     text-decoration: none;
@@ -46,7 +46,6 @@ function emailConfirmacao($nome, $linkConfirmacao) {
                 <div class="email-body">
                     <p>Olá, <strong>' . htmlspecialchars($nome) . '</strong>!</p>
                     <p>Obrigado por se cadastrar em nosso sistema. Para ativar sua conta e validar seu e-mail, clique no botão abaixo:</p>
-                    <p>Por motivos de segurança, recomendamos que você altere sua senha após o primeiro login.</p>
                     <a href="' . $linkConfirmacao . '" class="email-button">Confirmar E-mail</a>
                 </div>
                 <div class="email-footer">
@@ -121,7 +120,6 @@ function emailSenhaLayout($nome, $senha_gerada, $linkLogin) {
                 <p><strong>Senha: $senha_gerada</strong></p>
                 <p>Você pode acessar o sistema através do seguinte link:</p>
                 <a href='$linkLogin'>Acessar Sistema</a>
-                <p>Por motivos de segurança, recomendamos que você altere sua senha após o primeiro login.</p>
                 <p>Se você não fez este cadastro, ignore este e-mail.</p>
             </div>
             <div class='footer'>
