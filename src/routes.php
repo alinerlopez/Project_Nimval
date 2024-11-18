@@ -7,6 +7,7 @@ require_once __DIR__ . '/controllers/PedidoController.php';
 require_once __DIR__ . '/controllers/SenhaController.php'; 
 require_once __DIR__ . '/controllers/HomeController.php';
 require_once __DIR__ . '/controllers/ClienteController.php';
+require_once __DIR__ . '/controllers/FuncionarioController.php';
 
 function handleRequest($page) {
     switch ($page) {
@@ -90,36 +91,66 @@ function handleRequest($page) {
             $controller->salvarStatusPedido();
             break;
 
-            case 'meus_pedidos':
-                $controller = new PedidoController();
-                $controller->exibirMeusPedidos();
-                break;
-            
-            case 'acompanhar_pedido':
-                $controller = new PedidoController();
-                $controller->acompanharPedido();
-                break;
-            
-            case 'editar_conta_cliente':
-                $controller = new ClienteController();
-                $controller->editarContaCliente();
-                break;
-            
-            case 'salvar_conta_cliente':
-                $controller = new ClienteController();
-                $controller->salvarContaCliente();
-                break;
-            ;
-            case 'remover_conta_cliente':
-                $controller = new ClienteController();
-                $controller->removerContaCliente();
-                break;
-                   
-                
+        case 'meus_pedidos':
+            $controller = new PedidoController();
+            $controller->exibirMeusPedidos();
+            break;
+        
+        case 'acompanhar_pedido':
+            $controller = new PedidoController();
+            $controller->acompanharPedido();
+            break;
+        
+        case 'editar_conta_cliente':
+            $controller = new ClienteController();
+            $controller->editarContaCliente();
+            break;
+        
+        case 'salvar_conta_cliente':
+            $controller = new ClienteController();
+            $controller->salvarContaCliente();
+            break;
+        ;
+        case 'remover_conta_cliente':
+            $controller = new ClienteController();
+            $controller->removerContaCliente();
+            break;
+        case 'configuracoes_conta':
+            include __DIR__ . '/views/configuracoes_conta.php';
+            break;
+        
+        case 'atualizar_conta_fornecedor':
+            $controller = new EmpresaController();
+            $controller->atualizarContaFornecedor();
+            break;
+        
+        case 'remover_conta_fornecedor':
+            $controller = new EmpresaController();
+            $controller->removerContaFornecedor();
+            break;
 
-        default:
-            header('HTTP/1.1 404 Not Found');
-            include __DIR__ . '/views/404.php';
-            exit;
-    }
+        case 'funcionarios':
+            include __DIR__ . '/views/funcionarios.php';
+            break;
+        
+        case 'cadastrar_funcionario':
+            $controller = new FuncionarioController();
+            $controller->cadastrarFuncionario();
+            break;
+        
+        case 'editar_funcionario':
+            $controller = new FuncionarioController();
+            $controller->editarFuncionario();
+            break;
+        
+        case 'remover_funcionario':
+            $controller = new FuncionarioController();
+            $controller->removerFuncionario();
+            break;
+
+    default:
+        header('HTTP/1.1 404 Not Found');
+        include __DIR__ . '/views/404.php';
+        exit;
+}
 }

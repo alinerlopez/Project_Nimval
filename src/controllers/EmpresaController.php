@@ -46,4 +46,52 @@ class EmpresaController {
             include __DIR__ . '/../views/empresa_cadastro.php';  
         }
     }
+
+    public function atualizarContaFornecedor() {
+        verificarSessao('id_fornecedor');
+    
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id_fornecedor = $_SESSION['id_fornecedor'];
+            $telefone = trim($_POST['tel_fornecedor']);
+            $email = trim($_POST['email_fornecedor']);
+    
+            try {
+                $resultado = EmpresaModel::atualizarFornecedor($id_fornecedor, $telefone, $email);
+    
+                if ($resultado) {
+                    $_SESSION['success'] = "Dados atualizados com sucesso!";
+                } else {
+                    $_SESSION['error'] = "Erro ao atualizar os dados. Tente novamente.";
+                }
+            } catch (Exception $e) {
+                $_SESSION['error'] = "Erro: " . $e->getMessage();
+            }
+        }
+    
+        header("Location: index.php?page=configuracoes_conta");
+        exit();
+    }
+
+    public function removerContaFornecedor() {
+        verificarSessao('id_fornecedor');
+    
+        $id_fornecedor = $_SESSION['id_fornecedor'];
+    
+        try {
+            $resultado = EmpresaModel::removerFornecedor($id_fornecedor);
+    
+            if ($resultado) {
+                $_SESSION['success'] = "Conta removida com sucesso. Entre em contato para reativá-la, se necessário.";
+            } else {
+                $_SESSION['error'] = "Erro ao tentar remover a conta. Tente novamente.";
+            }
+        } catch (Exception $e) {
+            $_SESSION['error'] = "Erro: " . $e->getMessage();
+        }
+    
+        header("Location: index.php?page=selecionar_perfil");
+        exit();
+    }
+    
+    
 }
