@@ -47,24 +47,40 @@ verificarSessao('id_fornecedor');
         }
 
         .btn-success {
-            background-color: #28a745;
+            width: 100%;
+            padding: 8px 16px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            background-color: #007bff;
             border: none;
         }
 
         .btn-success:hover {
-            background-color: #218838;
+            background-color: #0056b3;
+           
         }
 
         .btn-finalizar {
-            background-color: #dc3545;
+            width: 100%;
+            padding: 8px 16px;
+            background-color: #28a745;
+            border: 2px solid #28a745;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
             border: none;
         }
 
         .btn-finalizar:hover {
-            background-color: #c82333;
+            background-color: #218838;
         }
 
         .btn-group {
+            width: 100%;
             display: flex;
             gap: 10px;
         }
@@ -95,8 +111,8 @@ verificarSessao('id_fornecedor');
             </div>
 
             <div class="btn-group">
-                <button type="submit" class="btn btn-success w-50">Atualizar Status</button>
-                <button type="button" class="btn btn-finalizar w-50" id="finalizarPedido">Finalizar</button>
+                <button type="submit" class="btn-primary btn-success">Atualizar Status</button>
+                <button type="button" class="btn-primary btn-finalizar" id="finalizarPedido">Finalizar</button>
             </div>
         </form>
     </div>
