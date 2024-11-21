@@ -58,19 +58,6 @@ verificarSessao('id_fornecedor');
                 </div>
             <?php endif; ?>
             <h2 class="text-center mb-4">Cadastro de Cliente</h2>
-            <?php if (isset($_SESSION['error'])): ?>
-                <div class="alert alert-danger text-center" id="error-message">
-                    <?= htmlspecialchars($_SESSION['error']); ?>
-                    <?php unset($_SESSION['error']); ?>
-                </div>
-            <?php endif; ?>
-            <?php if (isset($_SESSION['success'])): ?>
-                <div class="alert alert-success text-center" id="success-message">
-                    <?= htmlspecialchars($_SESSION['success']); ?>
-                    <?php unset($_SESSION['success']); ?>
-                </div>
-            <?php endif; ?>
-
             <form method="POST" action="index.php?page=cadastrar_cliente">
                 <div class="form-group mb-3">
                     <label for="nome">Nome</label>
