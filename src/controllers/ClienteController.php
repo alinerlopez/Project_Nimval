@@ -5,9 +5,10 @@ require_once __DIR__ . '/../utils/session_helper.php';
 class ClienteController {
     public function exibirConsultaClientes() {
         verificarSessao('id_fornecedor');
-        $clientes = ClienteModel::getAllClientes();
+        $clientes = ClienteModel::getAllClientes(); 
         include __DIR__ . '/../views/editar_clientes.php';
     }
+    
 
     public function atualizarCliente() {
         verificarSessao('id_fornecedor');
@@ -76,18 +77,17 @@ class ClienteController {
     }
 
     public function editarContaCliente() {
-        verificarSessao('id_cliente');
+        verificarSessao('id_cliente'); 
     
-        $id_cliente = $_SESSION['usuario'];
+        $id_cliente = $_SESSION['usuario']; 
         try {
             $cliente = ClienteModel::getClienteById($id_cliente);
     
-            if (!$cliente) {
+            if (!$cliente) { 
                 $_SESSION['error'] = "Cliente não encontrado.";
                 header('Location: index.php?page=home');
                 exit();
             }
-    
             include __DIR__ . '/../views/editar_conta_cliente.php';
         } catch (Exception $e) {
             $_SESSION['error'] = "Erro ao carregar os dados: " . $e->getMessage();
@@ -95,6 +95,7 @@ class ClienteController {
             exit();
         }
     }
+    
     public function salvarContaCliente() {
         verificarSessao('id_cliente');
     

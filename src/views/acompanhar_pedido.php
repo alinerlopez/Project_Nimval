@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acompanhar Pedido</title>
     <link href="/Project_Nimval/public/assets/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/Project_Nimval/public/assets/css/colors.css">

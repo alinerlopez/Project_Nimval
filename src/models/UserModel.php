@@ -4,40 +4,42 @@ require_once __DIR__ . '/../models/EmailModel.php';
 
 class UserModel {
 
-    public static function createClient($nome, $email, $cpf, $telefone) {
+    public static function createClient($nome, $email, $tipo_cliente, $identificacao, $telefone) {
         $pdo = Database::getConnection();
-        
-        $existingClientByCPF = self::findClientByCPF($cpf);
-        if ($existingClientByCPF) {
-            if ($existingClientByCPF['ativo'] == 1) {
-                throw new Exception("Cliente com este CPF já está ativo.");
+    
+        $existingClient = self::findClientByIdentificacao($identificacao);
+        if ($existingClient) {
+            if ($existingClient['ativo'] == 1) {
+                throw new Exception("Cliente com esta identificação já está ativo.");
             }
         }
-
-     
+    
         $existingClientByEmail = self::findClientByEmail($email);
         if ($existingClientByEmail) {
             if ($existingClientByEmail['ativo'] == 1) {
                 throw new Exception("Cliente com este e-mail já está ativo.");
             }
-         }
-
+        }
+    
         $senha = bin2hex(random_bytes(4)); 
-        $senha_hash = password_hash($senha, PASSWORD_BCRYPT); 
-
+        $senha_hash = password_hash($senha, PASSWORD_BCRYPT);
+    
         try {
-            $stmt = $pdo->prepare("INSERT INTO clientes (nome, email, senha, cpf, telefone, ativo) 
-                                   VALUES (:nome, :email, :senha, :cpf, :telefone, 1)");
+            $stmt = $pdo->prepare("
+                INSERT INTO clientes (nome, email, senha, identificacao, tipo_cliente, telefone, ativo)
+                VALUES (:nome, :email, :senha, :identificacao, :tipo_cliente, :telefone, 1)
+            ");
             $stmt->bindParam(':nome', $nome);
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':senha', $senha_hash);
-            $stmt->bindParam(':cpf', $cpf);
+            $stmt->bindParam(':identificacao', $identificacao);
+            $stmt->bindParam(':tipo_cliente', $tipo_cliente);
             $stmt->bindParam(':telefone', $telefone);
-
+    
             $resultado = $stmt->execute();
-
+    
             if ($resultado) {
-                $linkLogin = 'http://localhost/Project_Nimval/public/index.php'; 
+                $linkLogin = 'http://localhost/Project_Nimval/public/index.php';
                 if (EmailModel::enviarEmailComSenha($nome, $email, $senha, $linkLogin)) {
                     error_log('Senha enviada para o e-mail do cliente.');
                     return true;
@@ -54,6 +56,25 @@ class UserModel {
             return false;
         }
     }
+    
+    public static function findClientByIdentificacao($identificacao) {
+        $pdo = Database::getConnection();
+    
+        $stmt = $pdo->prepare("
+            SELECT * 
+            FROM clientes 
+            WHERE identificacao = :identificacao");
+        $stmt->bindParam(':identificacao', $identificacao);
+        $stmt->execute();
+    
+        error_log("Buscando cliente com identificação normalizada: $identificacao");
+    
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    
+    
+    
 
 
     public static function createUser($nome, $email, $senha_hash, $nivel_acesso, $fornecedor_id, $cpf, $telefone) {

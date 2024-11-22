@@ -14,8 +14,12 @@
             height: 100vh; 
             top: 0;
             left: 0;
-            transition: width 0.3s ease;
+            transition: transform 0.3s ease, width 0.3s ease;
             z-index: 1000; 
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
         }
 
         .sidebar a {
@@ -61,10 +65,21 @@
             background-color: #f8f9fa;
             height: 100vh;
             overflow: auto;
+            transition: margin-left 0.3s ease;
         }
+
+        .content.collapsed {
+            margin-left: 0;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
-                width: 100%; 
+                width: 260px;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
             }
 
             .content {
@@ -75,7 +90,11 @@
 
     <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
         <h4 class="mb-0">Nimval</h4>
+        <button class="btn btn-primary btn-sm d-md-none" id="toggleSidebar">
+            <i class="fas fa-bars"></i>
+        </button>
     </div>
+
     <ul class="nav flex-column">
         <li class="nav-item">
             <a href="index.php?page=home" class="nav-link">
@@ -121,7 +140,7 @@
                     <i class="fas fa-cog"></i> <span>Configurações de Conta</span>
                 </a>
             </li>
-            <?php endif; ?>
+        <?php endif; ?>
         <li class="nav-item">
             <a href="index.php?page=logout" onclick="return confirm('Você realmente deseja sair?');" class="nav-link btn btn-danger">
                 <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
@@ -129,3 +148,14 @@
         </li>
     </ul>
 </nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.getElementById('sidebar');
+        const toggleButton = document.getElementById('toggleSidebar');
+
+        toggleButton.addEventListener('click', function () {
+            sidebar.classList.toggle('active');
+        });
+    });
+</script>

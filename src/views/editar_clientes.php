@@ -13,9 +13,11 @@ if (!isset($_SESSION['usuario'])) {
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consulta de Clientes</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.6/inputmask.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script> 
+    
     <style>
         body {
             display: flex;
@@ -144,6 +146,30 @@ if (!isset($_SESSION['usuario'])) {
             border-radius: 5px;
             border: 1px solid #ccc;
         }
+        .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .pagination button {
+        margin: 0 5px;
+        padding: 8px 12px;
+        border: 1px solid #007bff;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .pagination button.active {
+        background-color: #0056b3;
+    }
+
+    .pagination button:hover {
+        background-color: #0056b3;
+    }
     </style>
 </head>
     <body>
@@ -151,85 +177,85 @@ if (!isset($_SESSION['usuario'])) {
     <?php include __DIR__ . '/../utils/sidebar_fornecedor.php'; ?>
 
     <div class="content">
-        <h2 class="text-center mb-4">Consulta de Clientes</h2>
+    <h2 class="text-center mb-4">Consulta de Clientes</h2>
 
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Buscar cliente por nome, CPF ou email..." onkeyup="filtrarClientes()">
-        </div>
+    <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Buscar cliente por nome, CPF/CNPJ ou email..." onkeyup="filtrarClientes()">
+    </div>
 
-        <table class="grid-table" id="clientesTable">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>CPF</th>
-                    <th>Email</th>
-                    <th>Endereço</th>
-                    <th>Telefone</th>
-                    <th>Ativo</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($clientes)): ?>
-                    <?php foreach ($clientes as $cliente): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($cliente['nome']); ?></td>
-                            <td><?php echo htmlspecialchars($cliente['cpf']); ?></td>
-                            <td><?php echo htmlspecialchars($cliente['email']); ?></td>
-                            <td><?php echo htmlspecialchars($cliente['endereco']); ?></td>
-                            <td><?php echo htmlspecialchars($cliente['telefone']); ?></td>
-                            <td><?php echo htmlspecialchars($cliente['ativo'] ? 'Sim' : 'Não'); ?></td>
-                            <td>
-                                <span class="action-icon" onclick="openEditModal(<?php echo $cliente['id_cliente']; ?>, '<?php echo htmlspecialchars($cliente['nome']); ?>', '<?php echo htmlspecialchars($cliente['cpf']); ?>', '<?php echo htmlspecialchars($cliente['email']); ?>', '<?php echo htmlspecialchars($cliente['endereco']); ?>', '<?php echo htmlspecialchars($cliente['telefone']); ?>', '<?php echo $cliente['ativo']; ?>')">
-                                    <i class="fas fa-edit"></i>
-                                </span>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
+    <table class="grid-table" id="clientesTable">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>CPF/CNPJ</th>
+                <th>Email</th>
+                <th>Endereço</th>
+                <th>Telefone</th>
+                <th>Ativo</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($clientes)): ?>
+                <?php foreach ($clientes as $cliente): ?>
                     <tr>
-                        <td colspan="7">Nenhum cliente encontrado.</td>
+                        <td><?= htmlspecialchars($cliente['nome']); ?></td>
+                        <td><?= htmlspecialchars($cliente['identificacao']); ?></td>
+                        <td><?= htmlspecialchars($cliente['email']); ?></td>
+                        <td><?= htmlspecialchars($cliente['endereco']); ?></td>
+                        <td><?= htmlspecialchars($cliente['telefone']); ?></td>
+                        <td><?= htmlspecialchars($cliente['ativo'] ? 'Sim' : 'Não'); ?></td>
+                        <td>
+                            <span class="action-icon" onclick="openEditModal(<?= $cliente['id_cliente']; ?>, '<?= htmlspecialchars($cliente['nome']); ?>', '<?= htmlspecialchars($cliente['identificacao']); ?>', '<?= htmlspecialchars($cliente['email']); ?>', '<?= htmlspecialchars($cliente['endereco']); ?>', '<?= htmlspecialchars($cliente['telefone']); ?>', '<?= $cliente['ativo']; ?>')">
+                                <i class="fas fa-edit"></i>
+                            </span>
+                        </td>
                     </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-
-        <div id="editModal" class="modal">
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7">Nenhum cliente encontrado.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+    <div id="editModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeEditModal()">&times;</span>
                 <h4>Editar Cliente</h4>
                 <form id="editForm" action="index.php?page=atualizar_cliente" method="post">
                     <input type="hidden" id="edit_id_cliente" name="id_cliente">
-
                     <label for="edit_nome">Nome:</label>
-                    <input type="text" id="edit_nome" name="nome" readonly>
+                    <input type="text" id="edit_nome" name="nome" class="form-control" readonly>
 
-                    <label for="edit_cpf">CPF:</label>
-                    <input type="text" id="edit_cpf" name="cpf" readonly>
+                    <label for="edit_identificacao">CPF/CNPJ:</label>
+                    <input type="text" id="edit_identificacao" name="identificacao" class="form-control" readonly>
 
                     <label for="edit_email">Email:</label>
-                    <input type="email" id="edit_email" name="email" required>
+                    <input type="email" id="edit_email" name="email" class="form-control" required>
 
                     <label for="edit_endereco">Endereço:</label>
-                    <input type="text" id="edit_endereco" name="endereco" required>
+                    <input type="text" id="edit_endereco" name="endereco" class="form-control" required>
 
                     <label for="edit_telefone">Telefone:</label>
-                    <input type="tel" id="edit_telefone" name="telefone" required>
+                    <input type="tel" id="edit_telefone" name="telefone" class="form-control" required>
 
                     <label for="edit_ativo">Ativo:</label>
-                    <select id="edit_ativo" name="ativo" required>
+                    <select id="edit_ativo" name="ativo" class="form-control" required>
                         <option value="1">Sim</option>
                         <option value="0">Não</option>
                     </select>
 
-                    <button type="submit">Salvar Alterações</button>
+                    <button type="submit" class="btn btn-primary mt-3">Salvar Alterações</button>
                 </form>
             </div>
         </div>
     </div>
+    <div id="paginationContainer" class="pagination"></div>
+    
+</div>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
         <script>
             
@@ -237,35 +263,38 @@ if (!isset($_SESSION['usuario'])) {
                 $('#edit_telefone').mask('(00) 00000-0000');
             });
             function filtrarClientes() {
-                const input = document.getElementById("searchInput").value.toLowerCase();
-                const rows = document.querySelectorAll("#clientesTable tbody tr");
+    const input = document.getElementById("searchInput").value.toLowerCase(); // Captura o valor do input
+    const rows = document.querySelectorAll("#clientesTable tbody tr"); // Captura todas as linhas da tabela
 
-                rows.forEach(row => {
-                    const nome = row.cells[0].textContent.toLowerCase();
-                    const cpf = row.cells[1].textContent.toLowerCase();
-                    const email = row.cells[2].textContent.toLowerCase();
+    rows.forEach(row => {
+        const nome = row.cells[0].textContent.toLowerCase(); // Nome na coluna 0
+        const identificacao = row.cells[1].textContent.toLowerCase(); // CPF/CNPJ na coluna 1
+        const email = row.cells[2].textContent.toLowerCase(); // Email na coluna 2
 
-                    if (nome.includes(input) || cpf.includes(input) || email.includes(input)) {
-                        row.style.display = "";
-                    } else {
-                        row.style.display = "none";
-                    }
-                });
-            }
+        // Verifica se alguma das colunas contém o termo pesquisado
+        if (nome.includes(input) || identificacao.includes(input) || email.includes(input)) {
+            row.style.display = ""; // Mostra a linha
+        } else {
+            row.style.display = "none"; // Esconde a linha
+        }
+    });
+}
 
             $(document).ready(function() {
                 $('#edit_telefone').mask('(00) 00000-0000');
             });  
 
-            function openEditModal(id, nome, cpf, email, endereco, telefone, ativo) {
-                document.getElementById('edit_id_cliente').value = id;
-                document.getElementById('edit_nome').value = nome;
-                document.getElementById('edit_cpf').value = cpf;
-                document.getElementById('edit_email').value = email;
-                document.getElementById('edit_endereco').value = endereco;
-                document.getElementById('edit_telefone').value = telefone;
-                document.getElementById('edit_ativo').value = ativo;
+           function openEditModal(id, nome, identificacao, email, endereco, telefone, ativo) {
+            document.getElementById('edit_id_cliente').value = id;
+            document.getElementById('edit_nome').value = nome;
+            document.getElementById('edit_identificacao').value = identificacao;
+            document.getElementById('edit_email').value = email;
+            document.getElementById('edit_endereco').value = endereco;
+            document.getElementById('edit_telefone').value = telefone;
+            document.getElementById('edit_ativo').value = ativo;
 
+            document.getElementById('editModal').style.display = 'block';
+        
                 $('#edit_telefone').mask('(00) 00000-0000');
                 document.getElementById('editModal').style.display = "block";
             }
@@ -280,6 +309,6 @@ if (!isset($_SESSION['usuario'])) {
                     modal.style.display = "none";
                 }
             }
-        </script>
+</script>
     </body>
 </html>

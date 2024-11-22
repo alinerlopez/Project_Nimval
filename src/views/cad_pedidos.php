@@ -3,24 +3,27 @@ require_once __DIR__ . '/../models/UserModel.php';
 require_once __DIR__ . '/../utils/session_helper.php';
 verificarSessao('id_fornecedor');
 
+if (isset($_POST['identificacao'])) {
+    $identificacao = trim($_POST['identificacao']); 
+    error_log("Identificação recebida: $identificacao");
 
-if (isset($_POST['cpf'])) {
-    $cpf = $_POST['cpf'];
-    $cliente = UserModel::findClientByCPF($cpf); 
+    $cliente = UserModel::findClientByIdentificacao($identificacao);
 
     if ($cliente) {
-        echo json_encode($cliente); 
+        echo json_encode($cliente);
     } else {
         echo json_encode(['error' => 'Cliente não encontrado']);
     }
-    exit(); 
+    exit();
 }
+
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Pedido</title>
     <link href="/Project_Nimval/public/assets/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -239,6 +242,30 @@ if (isset($_POST['cpf'])) {
     max-width: 400px;
     text-align: center;
 }
+#tipo_documento {
+        width: 80px; 
+        padding: 8px; 
+        font-size: 12px; 
+        font-family: Arial, sans-serif; 
+        color: #333; 
+        background-color: #f8f9fa; 
+        border: 2px solid #007bff; 
+        border-radius: 8px; /
+        appearance: none; 
+        cursor: pointer; 
+        transition: all 0.3s ease; 
+    }
+
+    #tipo_documento:hover {
+        background-color: #e9ecef; 
+        border-color: #0056b3; 
+    }
+
+    #tipo_documento:focus {
+        outline: none; 
+        border-color: #0056b3; 
+        box-shadow: 0 0 5px rgba(0, 91, 187, 0.5); 
+    }
 
     </style>
 </head>
@@ -246,6 +273,7 @@ if (isset($_POST['cpf'])) {
 <?php include __DIR__ . '/../utils/sidebar_fornecedor.php'; ?>
 
 <div class="content">
+    
     <?php if (isset($_SESSION['error'])): ?>
         <div class="alert alert-danger text-center" id="error-message">
             <?= htmlspecialchars($_SESSION['error']); ?>
@@ -258,77 +286,87 @@ if (isset($_POST['cpf'])) {
             <?php unset($_SESSION['success']); ?>
         </div>
     <?php endif; ?>
-    <h2 class="text-center mb-4">Cadastro de Pedido</h2>
-        
-        <div class="search-container">
-            <input type="text" id="cpf" placeholder="Digite o CPF do cliente" maxlength="14">
-            <button onclick="buscarCliente()">Buscar</button>
-        </div>
 
-        <div id="clienteEncontrado" style="display: none;">
+    <h2 class="text-center mb-4">Cadastro de Pedido</h2>
+    <div class="search-container">
+    <label for="tipo_documento">Tipo de Documento:</label>
+    <select id="tipo_documento">
+        <option value="cpf">CPF</option>
+        <option value="cnpj">CNPJ</option>
+    </select>
+    <input type="text" id="documento" placeholder="Digite o CPF ou CNPJ do cliente" maxlength="18">
+    <button id="buscarCliente" onclick="buscarCliente()">Buscar</button>
+</div>
+    <div id="clienteEncontrado" style="display: none;">
         <div class="client-card">
             <h3 id="clientName"></h3>
-            <p><strong>CPF:</strong> <span id="clientCpf"></span></p>
+            <p><strong>CPF/CNPJ:</strong> <span id="clientCpfCnpj"></span></p>
             <p><strong>Email:</strong> <span id="clientEmail"></span></p>
             <a href="javascript:void(0);" class="btn" onclick="openPedidoForm()">Cadastrar Pedido</a>
         </div>
     </div>
+    </div>
 
-   
-<div id="pedidoModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closePedidoForm()">&times;</span>
-        <h3 id="modalTitle">Cadastrar Pedido para <span id="clienteNome"></span></h3>
+    <div id="pedidoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePedidoForm()">&times;</span>
+            <h3 id="modalTitle">Cadastrar Pedido para <span id="clienteNome"></span></h3>
 
-        <form action="index.php?page=cadastrar_pedido" method="post">
-            <input type="hidden" id="id_cliente" name="id_cliente">
+            <form action="index.php?page=cadastrar_pedido" method="post">
+                <input type="hidden" id="id_cliente" name="id_cliente">
 
-            <label for="numeroPedido">Número do Pedido:</label>
-            <input type="text" id="num_pedido" name="num_pedido" required>
-            
-            <label for="descricao">Descrição do Pedido:</label>
-            <textarea id="descricao" name="descricao_pedido" rows="6" maxlength="180" required></textarea>
+                <label for="numeroPedido">Número do Pedido:</label>
+                <input type="text" id="num_pedido" name="num_pedido" required>
 
-            <label for="data_pedido">Data do Pedido:</label>
-            <input type="date" id="data_pedido" name="data_pedido" required>
+                <label for="descricao">Descrição do Pedido:</label>
+                <textarea id="descricao" name="descricao_pedido" rows="6" maxlength="180" required></textarea>
 
-            <button type="submit" class="btn">Cadastrar Pedido</button>
-        </form>
+                <label for="data_pedido">Data do Pedido:</label>
+                <input type="date" id="data_pedido" name="data_pedido" required>
+
+                <button type="submit" class="btn">Cadastrar Pedido</button>
+            </form>
+        </div>
     </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-
 <script>
-    $(document).ready(function() {
-    $('#cpf').mask('000.000.000-00');
-    setTimeout(function() {
-        $('#error-message').fadeOut('slow');
-        $('#success-message').fadeOut('slow');
-    }, 800);
-});
+    $(document).ready(function () {
+        const documentoInput = $('#documento');
+        const tipoDocumento = $('#tipo_documento');
 
-function buscarCliente() {
-    const cpf = $('#cpf').val(); 
+        function aplicarMascara() {
+            const tipo = tipoDocumento.val();
+            if (tipo === 'cpf') {
+                documentoInput.mask('000.000.000-00', { reverse: true });
+            } else if (tipo === 'cnpj') {
+                documentoInput.mask('00.000.000/0000-00', { reverse: true });
+            }
+        }
 
-    if (cpf.length === 14) { 
+        aplicarMascara();
+        tipoDocumento.change(aplicarMascara);
+    })
+
+    function buscarCliente() {
+    const identificacao = $('#documento').val();
+
+    if (identificacao.length === 14 || identificacao.length === 18) {
         $.ajax({
-            url: '/Project_Nimval/src/views/cad_pedidos.php', 
+            url: '/Project_Nimval/src/views/cad_pedidos.php',
             method: 'POST',
-            data: { cpf: cpf },
+            data: { identificacao: identificacao },
             success: function(data) {
-                console.log('Resposta recebida:', data);  
                 try {
-                    const jsonData = JSON.parse(data); 
-                    console.log("Dados JSON processados:", jsonData); 
-
+                    const jsonData = JSON.parse(data);
                     if (jsonData.error) {
                         alert(jsonData.error);
                         $('#clienteEncontrado').hide();
                     } else {
                         $('#clientName').text(jsonData.nome);
-                        $('#clientCpf').text(jsonData.cpf);
+                        $('#clientCpfCnpj').text(jsonData.identificacao);
                         $('#clientEmail').text(jsonData.email);
                         $('#clienteEncontrado').show();
                         $('#id_cliente').val(jsonData.id_cliente);
@@ -344,10 +382,9 @@ function buscarCliente() {
             }
         });
     } else {
-        alert('Por favor, insira um CPF válido.');
+        alert('Por favor, insira um CPF ou CNPJ válido.');
     }
 }
-
 
     function openPedidoForm() {
         const clienteNome = document.getElementById('clientName').innerText;
@@ -359,13 +396,15 @@ function buscarCliente() {
         document.getElementById('pedidoModal').style.display = 'none';
     }
 
-    window.onclick = function(event) {
-        if (event.target == document.getElementById('pedidoModal')) {
+    window.onclick = function (event) {
+        const modal = document.getElementById('pedidoModal');
+        if (event.target === modal) {
             closePedidoForm();
         }
-    }
+    };
 </script>
-<script src="/Project_Nimval/public/assets/js/bootstrap.bundle.min.js"></script>
 
+<script src="/Project_Nimval/public/assets/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

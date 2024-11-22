@@ -6,9 +6,9 @@ verificarSessao('id_fornecedor');
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pedidos</title>
     <link href="/Project_Nimval/public/assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/Project_Nimval/public/assets/css/global.css" rel="stylesheet">
     <style>
         body {
             display: flex;
@@ -64,6 +64,7 @@ verificarSessao('id_fornecedor');
         }
 
         .btn {
+            width: 100%;
             padding: 8px 16px;
             border: 2px solid #007bff;
             border-radius: 5px;
@@ -123,11 +124,11 @@ verificarSessao('id_fornecedor');
                         <td><?= htmlspecialchars($pedido['status_pedido']); ?></td>
                         <td><?= htmlspecialchars($pedido['data_pedido']); ?></td>
                         <td>
-                            <a 
-                                href="<?= strtolower($pedido['status_pedido']) !== 'finalizado' ? "index.php?page=atualizar_status_pedido&id_pedido=" . htmlspecialchars($pedido['id_pedido']) : '#'; ?>"
-                                class="btn btn-primary <?= strtolower($pedido['status_pedido']) === 'finalizado' ? 'disabled' : ''; ?>">
-                                Atualizar
-                            </a>
+                        <a 
+                            href="<?= strtolower($pedido['status_pedido']) !== 'finalizado' ? "index.php?page=atualizar_status_pedido&id_pedido=" . htmlspecialchars($pedido['id_pedido']) : '#'; ?>"
+                            class="btn btn-primary <?= strtolower($pedido['status_pedido']) === 'finalizado' ? 'disabled' : ''; ?>">
+                            <?= strtolower($pedido['status_pedido']) === 'finalizado' ? 'Finalizado' : 'Atualizar'; ?>
+                        </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

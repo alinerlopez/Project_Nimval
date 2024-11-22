@@ -58,39 +58,56 @@ verificarSessao('id_fornecedor');
                 </div>
             <?php endif; ?>
             <h2 class="text-center mb-4">Cadastro de Cliente</h2>
-            <form method="POST" action="index.php?page=cadastrar_cliente">
-                <div class="form-group mb-3">
-                    <label for="nome">Nome</label>
-                    <input type="text" class="form-control" id="nome" name="nome" autocomplete="off" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="cpf">CPF</label>
-                    <input type="text" class="form-control" id="cpf" name="cpf" autocomplete="off" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="telefone">Telefone</label>
-                    <input type="text" class="form-control" id="telefone" name="telefone" autocomplete="off" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" autocomplete="off" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Cadastrar Cliente</button>
-            </form>
+<form method="POST" action="index.php?page=cadastrar_cliente">
+    <div class="form-group mb-3">
+        <label for="nome">Nome</label>
+        <input type="text" class="form-control" id="nome" name="nome" autocomplete="off" required>
     </div>
+    <div class="form-group mb-3">
+        <label for="tipo_cliente">Tipo de Cliente:</label>
+        <div>
+            <input type="radio" id="fisico" name="tipo_cliente" value="fisico" checked onchange="alterarMascaraDocumento()">
+            <label for="fisico">Pessoa Física</label>
+            <input type="radio" id="juridico" name="tipo_cliente" value="juridico" onchange="alterarMascaraDocumento()">
+            <label for="juridico">Pessoa Jurídica</label>
+        </div>
+    </div>
+    <div class="form-group mb-3">
+        <label for="documento">CPF/CNPJ:</label>
+        <input type="text" id="documento" name="documento" class="form-control" required>
+    </div>
+    <div class="form-group mb-3">
+        <label for="telefone">Telefone</label>
+        <input type="text" class="form-control" id="telefone" name="telefone" autocomplete="off" required>
+    </div>
+    <div class="form-group mb-3">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" autocomplete="off" required>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Cadastrar Cliente</button>
+</form>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#cpf').mask('000.000.000-00');
-            $('#telefone').mask('(00) 00000-0000');
-            setTimeout(function() {
-                $('#error-message').fadeOut('slow');
-                $('#success-message').fadeOut('slow');
-            }, 800);
-        });
-    </script>
-    <script src="/Project_Nimval/public/assets/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script>
+    function alterarMascaraDocumento() {
+        const tipoFisico = document.querySelector('input[name="tipo_cliente"]:checked').value === 'fisico';
+        const documento = document.getElementById('documento');
+
+        if (tipoFisico) {
+            $(documento).mask('000.000.000-00'); 
+        } else {
+            $(documento).mask('00.000.000/0000-00'); 
+        }
+        documento.value = ''; 
+    }
+
+    $(document).ready(() => {
+        $('#telefone').mask('(00)00000-0000'); 
+        $('#documento').mask('000.000.000-00'); 
+    });
+</script>
+<script src="/Project_Nimval/public/assets/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
