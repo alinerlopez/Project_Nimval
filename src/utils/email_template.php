@@ -1,8 +1,11 @@
 <?php
 function emailConfirmacao($nome, $linkConfirmacao) {
     return '
-        <html>
+        <!DOCTYPE html>
+        <html lang="pt-BR">
         <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <style>
                 .email-container {
                     font-family: Arial, sans-serif;
@@ -21,15 +24,7 @@ function emailConfirmacao($nome, $linkConfirmacao) {
                     margin: 20px 0;
                     border-radius: 8px;
                     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                }
-                .email-button {
-                    background-color: #ffffff;
-                    color: #ffffff;
-                    padding: 10px 20px;
-                    text-decoration: none;
-                    border-radius: 4px;
-                    display: inline-block;
-                    margin-top: 10px;
+                    text-align: center;
                 }
                 .email-footer {
                     font-size: 12px;
@@ -44,9 +39,14 @@ function emailConfirmacao($nome, $linkConfirmacao) {
                     <h1>Confirmação de E-mail</h1>
                 </div>
                 <div class="email-body">
-                    <p>Olá, <strong>' . htmlspecialchars($nome) . '</strong>!</p>
+                    <p>Olá, <strong>' . htmlspecialchars($nome, ENT_QUOTES, "UTF-8") . '</strong>!</p>
                     <p>Obrigado por se cadastrar em nosso sistema. Para ativar sua conta e validar seu e-mail, clique no botão abaixo:</p>
-                    <a href="' . $linkConfirmacao . '" class="email-button">Confirmar E-mail</a>
+                    <a href="' . htmlspecialchars($linkConfirmacao, ENT_QUOTES, "UTF-8") . '" 
+                       style="background-color: #001133; color: #ffffff; padding: 10px 20px; 
+                       text-decoration: none; border-radius: 4px; display: inline-block; 
+                       font-size: 16px; font-weight: bold;">
+                        Confirmar E-mail
+                    </a>
                 </div>
                 <div class="email-footer">
                      © 2024 Nimval Rastreamentos. Todos os direitos reservados.
